@@ -309,8 +309,24 @@ export default function KeyRotationStatus({
               Romanian Security Certificate
             </div>
             <div className="flex flex-col space-y-2 border border-blue-100 bg-white p-2 rounded">
-              <div className="text-center font-medium text-blue-800 border-b border-blue-100 pb-1">
+              <div className="text-center font-medium text-blue-800 border-b border-blue-100 pb-1 relative">
                 CERTIFICAT DE SECURITATE ROMÂNESC
+                {hasRomanianCert ? (
+                  <span className="absolute right-1 top-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-green-600">
+                      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                      <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                  </span>
+                ) : (
+                  <span className="absolute right-1 top-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-amber-600">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <line x1="12" y1="8" x2="12" y2="12"></line>
+                      <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                  </span>
+                )}
               </div>
               <div className="flex justify-between text-[10px]">
                 <span className="text-slate-500">ID de securitate:</span>
@@ -339,6 +355,40 @@ export default function KeyRotationStatus({
                     </div>
                   </div>
                   <div className="absolute top-1 right-0 h-2 w-2 bg-green-500 rounded-full animate-pulse"></div>
+                </div>
+              </div>
+              
+              {/* Payment verification section */}
+              <div className="mt-2 pt-1 border-t border-blue-100">
+                <div className="text-[8px] text-center text-blue-700 font-medium">VERIFICARE PLATĂ</div>
+                <div className="flex justify-between items-center mt-1 text-[7px]">
+                  <span className="text-slate-500">Metodă:</span>
+                  <div className="flex items-center">
+                    <span className={currentUser?.isSubscribed ? "text-green-700 font-medium" : "text-red-600"}>
+                      {currentUser?.isSubscribed ? "CEC FIZIC VERIFICAT" : "NEPLĂTIT"}
+                    </span>
+                    {currentUser?.isSubscribed ? (
+                      <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1 text-green-600">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                      </svg>
+                    ) : (
+                      <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1 text-red-600">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="15" y1="9" x2="9" y2="15"></line>
+                        <line x1="9" y1="9" x2="15" y2="15"></line>
+                      </svg>
+                    )}
+                  </div>
+                </div>
+                <div className="flex justify-between items-center mt-1 text-[7px]">
+                  <span className="text-slate-500">Valoare:</span>
+                  <span className={currentUser?.isSubscribed ? "text-green-700 font-medium" : "text-red-600"}>
+                    {currentUser?.isSubscribed ? "900.000 GBP" : "0 GBP"}
+                  </span>
+                </div>
+                <div className="mt-1 text-[6px] text-center text-blue-800 font-bold">
+                  FĂRĂ RAMBURSARE
                 </div>
               </div>
             </div>
