@@ -9,6 +9,7 @@ import CodeBlock from "@/components/CodeBlock";
 import ComplexityTable from "@/components/ComplexityTable";
 import ComplexityChart from "@/components/ComplexityChart";
 import ApplicationDomains from "@/components/ApplicationDomains";
+import PerformanceMetrics from "@/components/PerformanceMetrics";
 
 import type { 
   GroverParameters, 
@@ -131,12 +132,21 @@ def quantum_phase_estimation(unitary, n_precision, target_state):
       </p>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
-        {/* Parameter Controls */}
-        <GroverControls 
-          parameters={groverParams} 
-          onChange={setGroverParams} 
-          onSimulate={runGroverSimulation}
-        />
+        <div>
+          {/* Performance Metrics */}
+          <PerformanceMetrics 
+            algorithmType="grover" 
+            parameters={groverParams} 
+            isSimulating={groverSimulated} 
+          />
+          
+          {/* Parameter Controls */}
+          <GroverControls 
+            parameters={groverParams} 
+            onChange={setGroverParams} 
+            onSimulate={runGroverSimulation}
+          />
+        </div>
 
         {/* Circuit Diagram */}
         <CircuitDiagram type="grover" parameters={groverParams} />
@@ -165,12 +175,21 @@ def quantum_phase_estimation(unitary, n_precision, target_state):
       </p>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
-        {/* Parameter Controls */}
-        <QFTControls 
-          parameters={qftParams} 
-          onChange={setQftParams} 
-          onSimulate={runQFTSimulation} 
-        />
+        <div>
+          {/* Performance Metrics */}
+          <PerformanceMetrics 
+            algorithmType="qft" 
+            parameters={qftParams} 
+            isSimulating={qftSimulated} 
+          />
+          
+          {/* Parameter Controls */}
+          <QFTControls 
+            parameters={qftParams} 
+            onChange={setQftParams} 
+            onSimulate={runQFTSimulation} 
+          />
+        </div>
 
         {/* Circuit Diagram */}
         <CircuitDiagram type="qft" parameters={qftParams} />
@@ -198,12 +217,21 @@ def quantum_phase_estimation(unitary, n_precision, target_state):
       </p>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
-        {/* Parameter Controls */}
-        <QPEControls 
-          parameters={qpeParams} 
-          onChange={setQpeParams} 
-          onSimulate={runQPESimulation} 
-        />
+        <div>
+          {/* Performance Metrics */}
+          <PerformanceMetrics 
+            algorithmType="qpe" 
+            parameters={qpeParams} 
+            isSimulating={qpeSimulated} 
+          />
+          
+          {/* Parameter Controls */}
+          <QPEControls 
+            parameters={qpeParams} 
+            onChange={setQpeParams} 
+            onSimulate={runQPESimulation} 
+          />
+        </div>
 
         {/* Circuit Diagram */}
         <CircuitDiagram type="qpe" parameters={qpeParams} />
