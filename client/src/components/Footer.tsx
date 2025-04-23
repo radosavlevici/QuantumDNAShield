@@ -98,7 +98,7 @@ const Footer = () => {
                       setCurrentLanguage(language.code);
                       setShowPaymentConfirmation(false);
                     } else {
-                      setPaymentConfirmationMessage(`You need to subscribe for 900,000 GBP per month to access premium languages like ${language.name}. Payment by cheque only.`);
+                      // For premium languages, just trigger payment info
                       confirmPaymentMethod();
                     }
                   }}

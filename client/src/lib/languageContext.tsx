@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { apiRequest } from './queryClient';
+import { validatePremiumAccess, detectUnauthorizedAccess } from './securityUtils';
 
 export type LanguageType = {
   id: number;
