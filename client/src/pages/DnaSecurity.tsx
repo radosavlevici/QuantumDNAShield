@@ -16,7 +16,7 @@ import {
   automaticCopyrightVerification
 } from "@/lib/securityUtils";
 import { useLanguage } from "@/lib/languageContext";
-import { Shield, Lock, Key, AlertTriangle, FileText, Check } from "lucide-react";
+import { Shield, Lock, Key, AlertTriangle, FileText, Check, RefreshCw } from "lucide-react";
 
 const DnaSecurity = () => {
   const [activeTab, setActiveTab] = useState("encryption");
@@ -57,6 +57,26 @@ const DnaSecurity = () => {
           `Protected: ${keyResult.isPrivate ? 'Yes' : 'No'}\n` +
           `Auto-rotation: ${keyResult.autoRotation ? 'Enabled' : 'Disabled'}\n` +
           (keyResult.autoRotation ? `Rotation period: ${keyResult.rotationPeriod}` : '')
+        );
+        break;
+      case "key-rotation":
+        // Handle the new key rotation demo
+        const privateKey = generateQuantumKey(true, true);
+        const publicKey = generateQuantumKey(false, true);
+        const rotationDate = new Date();
+        rotationDate.setDate(rotationDate.getDate() + (privateKey.isPrivate ? 90 : 7));
+        
+        setDemoResult(
+          `🔐 Romanian Key Rotation System 🔐\n\n` +
+          `Keys are managed under strict Romanian ROQKD standards\n\n` +
+          `Private Key: ${privateKey.key.substring(0, 16)}...\n` +
+          `Public Key: ${publicKey.key.substring(0, 16)}...\n\n` +
+          `Security Level: LEVEL 5 (Romanian Ultra-Secure)\n` +
+          `Romanian Validation Code: ${privateKey.validationCode}\n` +
+          `Next rotation: ${rotationDate.toDateString()}\n\n` +
+          `Payment: 900,000 GBP by CHEQUE ONLY\n` +
+          `Refund Policy: STRICT NO-REFUND (fărăRambursare900000)\n\n` +
+          `⚠️ Emergency override requires physical verification.`
         );
         break;
       case "copyright":
@@ -440,6 +460,14 @@ const DnaSecurity = () => {
                     </div>
                   </div>
                 </CardContent>
+                <CardFooter>
+                  <Button
+                    onClick={() => handleDemo("key-rotation")}
+                    className="w-full"
+                  >
+                    Demonstrate Key Rotation System
+                  </Button>
+                </CardFooter>
               </Card>
               
               <Card>
