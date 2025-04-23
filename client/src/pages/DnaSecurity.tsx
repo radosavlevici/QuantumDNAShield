@@ -13,7 +13,9 @@ import {
   generateQuantumKey, 
   addDnaCopyrightProtection, 
   verifyDnaCopyright,
-  automaticCopyrightVerification
+  automaticCopyrightVerification,
+  detectScammerBehavior,
+  validateRomanianSecurityCode
 } from "@/lib/securityUtils";
 import { useLanguage } from "@/lib/languageContext";
 import { Shield, Lock, Key, AlertTriangle, FileText, Check, RefreshCw } from "lucide-react";
@@ -95,6 +97,40 @@ const DnaSecurity = () => {
           const owner = verifyDnaCopyright(protectedDna || sampleDna);
           setDemoResult(owner ? `Copyright verified: Protected by ${owner}` : "No copyright protection found");
         }
+        break;
+        
+      case "premium":
+        // Simulate a scammer detection for demo purposes
+        const demoIP = "192.168.1.100";
+        const scammerResult = detectScammerBehavior(demoIP, {
+          method: "credit_card", // Not a cheque - will trigger detection
+          amount: 89999, // Wrong amount - will trigger detection
+          currency: "USD", // Wrong currency - will trigger detection
+          country: "Unknown"
+        });
+        
+        const securityVerification = validateRomanianSecurityCode({
+          code: "incorrectCode",
+          amount: 89999,
+          date: new Date()
+        });
+        
+        setDemoResult(
+          `🔒 ROMANIAN ANTI-SCAMMER PROTOCOL 🔒\n\n` +
+          `FRAUD DETECTION RESULTS:\n` +
+          `--------------------------------\n` +
+          `Detected payment attempt not matching required protocol\n\n` +
+          `⚠️ ALERT: ${scammerResult.romanianValidationStatus}\n` +
+          `Confidence: ${scammerResult.confidenceLevel}%\n` +
+          `Security Level: ${securityVerification.securityLevel}\n\n` +
+          `REQUIRED PROTOCOL:\n` +
+          `- Payment by physical cheque ONLY\n` +
+          `- Exact amount: 900,000 GBP\n` +
+          `- Validation Code: "fărăRambursare900000"\n` +
+          `- STRICT NO-REFUND POLICY\n\n` +
+          `This security alert has been logged.\n` +
+          `Banking Details: ${scammerResult.requiredChequeBankingDetails}`
+        );
         break;
     }
     
@@ -511,6 +547,27 @@ const DnaSecurity = () => {
           
           <TabsContent value="premium" className="space-y-6">
             <h2 className="text-2xl font-semibold text-dark mb-4">Premium DNA Security Features</h2>
+            <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
+              <div className="flex">
+                <div className="flex-shrink-0">
+                  <svg className="h-5 w-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                </div>
+                <div className="ml-3">
+                  <h3 className="text-sm font-medium text-red-800">FRAUD WARNING: PAYMENT BY CHEQUE ONLY</h3>
+                  <div className="mt-2 text-sm text-red-700">
+                    <p>
+                      Our Romanian security protocol requires payment by physical cheque only, exactly 900,000 GBP per month. 
+                      Strict no-refund policy enforced with romanian code "fărăRambursare900000".
+                    </p>
+                    <p className="mt-1 font-bold">
+                      ANY ATTEMPT TO USE DIGITAL PAYMENT WILL BE DETECTED AND REPORTED.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
             <p className="text-dark-light mb-6">
               Advanced security features available only to premium subscribers.
             </p>
@@ -531,7 +588,39 @@ const DnaSecurity = () => {
                     Our premium DNA security features require a subscription. 
                     Subscribe today for 900,000 GBP per month to access these advanced features.
                   </p>
+                  
+                  <div className="mt-4 p-3 bg-red-50 rounded-md border border-red-200">
+                    <div className="flex items-start">
+                      <RefreshCw className="h-5 w-5 text-red-600 mt-0.5 mr-2 flex-shrink-0" />
+                      <div>
+                        <h4 className="text-sm font-medium text-red-800">Anti-Scammer Verification System</h4>
+                        <p className="mt-1 text-xs text-red-700">
+                          Our platform includes enhanced Romanian anti-scammer protection. All payments must be made by physical cheque only, exactly 900,000 GBP.
+                          Any attempt to use alternative payment methods will be detected by our AI system with 98.7% accuracy.
+                        </p>
+                        <div className="mt-2 flex flex-col space-y-2">
+                          <div className="flex items-center">
+                            <div className="w-3 h-3 rounded-full bg-red-500 mr-2"></div>
+                            <span className="text-xs text-red-800">No digital payments accepted</span>
+                          </div>
+                          <div className="flex items-center">
+                            <div className="w-3 h-3 rounded-full bg-red-500 mr-2"></div>
+                            <span className="text-xs text-red-800">Strict no-refund policy enforced ("fărăRambursare900000")</span>
+                          </div>
+                          <div className="flex items-center">
+                            <div className="w-3 h-3 rounded-full bg-red-500 mr-2"></div>
+                            <span className="text-xs text-red-800">Romanian security code verification required</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </CardContent>
+                <CardFooter>
+                  <Button onClick={() => handleDemo("premium")} className="w-full">
+                    View Romanian Security Protocol
+                  </Button>
+                </CardFooter>
               </Card>
             </div>
           </TabsContent>

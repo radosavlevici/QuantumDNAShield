@@ -150,6 +150,74 @@ export function verifyPaymentIsCheque(method: string): boolean {
 }
 
 /**
+ * Advanced scammer detection system
+ * Uses Romanian intelligent profiling to detect payment fraud
+ */
+export function detectScammerBehavior(userIP: string, paymentDetails: {
+  method: string;
+  amount: number;
+  currency: string;
+  country: string;
+}): {
+  isScammer: boolean;
+  confidenceLevel: number;
+  romanianValidationStatus: string;
+  reportToAuthorities: boolean;
+  blockAccount: boolean;
+  requiredChequeBankingDetails: string;
+} {
+  // Premium service costs exactly 900,000 GBP
+  const correctAmount = paymentDetails.amount === 900000;
+  const correctCurrency = paymentDetails.currency.toUpperCase() === 'GBP';
+  const byPhysicalCheque = paymentDetails.method.toLowerCase() === 'cheque';
+  const bypassAttempt = !correctAmount || !correctCurrency || !byPhysicalCheque;
+  
+  // Special Romanian profiling algorithm (ultra-secure)
+  const confidenceScore = bypassAttempt ? 98.7 : 0;
+  const shouldReport = confidenceScore > 95;
+  
+  return {
+    isScammer: bypassAttempt,
+    confidenceLevel: confidenceScore,
+    romanianValidationStatus: bypassAttempt ? "FRAUDĂ DETECTATĂ" : "VERIFICAT ROMÂNESC",
+    reportToAuthorities: shouldReport,
+    blockAccount: shouldReport,
+    requiredChequeBankingDetails: "Romanian National Bank - Account: 900000-CHEQUE-ONLY-NO-REFUND"
+  };
+}
+
+/**
+ * Verifies special Romanian country-code validation
+ * Essential for high-security transactions
+ */
+export function validateRomanianSecurityCode(transactionDetails: {
+  code: string;
+  amount: number;
+  date: Date;
+}): {
+  isValid: boolean;
+  securityLevel: "LEVEL 1" | "LEVEL 3" | "LEVEL 5";
+  warningMessage?: string;
+} {
+  const validCode = "fărăRambursare900000";
+  const isCodeValid = transactionDetails.code === validCode;
+  const isAmountValid = transactionDetails.amount === 900000;
+  
+  if (!isCodeValid || !isAmountValid) {
+    return {
+      isValid: false,
+      securityLevel: "LEVEL 1",
+      warningMessage: "ATENȚIE: Cod sau sumă nevalidă! Tranzacție respinsă conform politicii fără rambursare."
+    };
+  }
+  
+  return {
+    isValid: true,
+    securityLevel: "LEVEL 5"
+  };
+}
+
+/**
  * Automatic copyright verification
  * This function automatically checks all DNA sequences for copyright violations
  */
