@@ -142,6 +142,19 @@ export default function KeyRotationStatus({
         <CardDescription>
           Auto-rotation {keyType === "private" ? "every 90 days" : "every 7 days"}
         </CardDescription>
+        <div className="mt-2 flex items-center">
+          <div className="flex-1 mr-2">
+            <div className="h-2 rounded-full bg-slate-200">
+              <div 
+                className={`h-2 rounded-full ${keyType === "private" ? "bg-blue-600" : "bg-green-500"}`} 
+                style={{ width: keyType === "private" ? "90%" : "75%" }}
+              ></div>
+            </div>
+          </div>
+          <span className="text-xs font-medium">
+            {keyType === "private" ? "Romanian Ultra-Secure" : "Standard Secure"}
+          </span>
+        </div>
       </CardHeader>
       
       <CardContent>
@@ -176,6 +189,16 @@ export default function KeyRotationStatus({
                     {entry.expiresAt && <span>Expires: {formatDate(entry.expiresAt)}</span>}
                     {!entry.expiresAt && <span>Never expires</span>}
                   </div>
+                  <div className="mt-1 pt-1 border-t border-slate-200 flex items-center justify-between">
+                    <div className="flex items-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-3 w-3 text-blue-600 mr-1">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                      </svg>
+                      <span className="text-xs text-blue-700">RO Code: fărăRambursare900000</span>
+                    </div>
+                    <span className="text-xs text-slate-500">{entry.keyType === "private" ? "∞" : "7d"}</span>
+                  </div>
                 </div>
               ))}
             </div>
@@ -183,26 +206,42 @@ export default function KeyRotationStatus({
         </div>
       </CardContent>
       
-      <CardFooter className="flex justify-between border-t pt-4">
-        <div className="flex space-x-2">
-          <Button 
-            variant={keyType === "private" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setKeyType("private")}
-          >
-            Private Keys
-          </Button>
-          <Button 
-            variant={keyType === "public" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setKeyType("public")}
-          >
-            Public Keys
+      <CardFooter className="flex flex-col gap-4 border-t pt-4">
+        <div className="flex justify-between w-full">
+          <div className="flex space-x-2">
+            <Button 
+              variant={keyType === "private" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setKeyType("private")}
+            >
+              Private Keys
+            </Button>
+            <Button 
+              variant={keyType === "public" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setKeyType("public")}
+            >
+              Public Keys
+            </Button>
+          </div>
+          <Button onClick={handleManualRotation} size="sm">
+            Rotate {keyType} key now
           </Button>
         </div>
-        <Button onClick={handleManualRotation} size="sm">
-          Rotate {keyType} key now
-        </Button>
+        
+        <div className="bg-slate-50 p-3 rounded-md border border-slate-200 text-xs">
+          <div className="font-medium mb-1 flex items-center text-slate-700">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-3 w-3 mr-1 text-blue-600">
+              <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
+            </svg>
+            Romanian Security Policy
+          </div>
+          <p className="text-slate-600 ml-4">
+            All keys follow the Romanian Quantum Key Distribution (ROQKD) standards with 
+            {keyType === "private" ? " 90-day" : " 7-day"} rotation. Payment by cheque only (900,000 GBP) 
+            with strict no-refund policy per validation code "fărăRambursare900000".
+          </p>
+        </div>
       </CardFooter>
     </Card>
   );
