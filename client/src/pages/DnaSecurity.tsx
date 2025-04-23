@@ -46,8 +46,15 @@ const DnaSecurity = () => {
         setDemoResult(`Tamper detection: ${isTampered ? 'Tampering detected ✗' : 'No tampering detected ✓'}`);
         break;
       case "key":
-        const key = generateQuantumKey();
-        setDemoResult(`Generated quantum-secure key: ${key}`);
+        const keyResult = generateQuantumKey(true); // Generate private key by default
+        setDemoResult(
+          `Generated ${keyResult.isPrivate ? 'private' : 'public'} quantum-secure key:\n\n` + 
+          `${keyResult.key}\n\n` + 
+          `Type: ${keyResult.isPrivate ? 'Private (ROQKD)' : 'Public (PUBQK)'}\n` + 
+          `Romanian validation code: ${keyResult.validationCode}\n` +
+          `Expires: ${keyResult.expiresIn}\n` +
+          `Protected: ${keyResult.isPrivate ? 'Yes' : 'No'}`
+        );
         break;
       case "copyright":
         const copyrightedDna = addDnaCopyrightProtection(sampleDna, ownerName);
@@ -139,9 +146,35 @@ const DnaSecurity = () => {
                     Secure key exchange for DNA data protection using quantum key distribution principles,
                     making it theoretically impossible for attackers to intercept keys without detection.
                   </p>
+                  
+                  <div className="mt-3 bg-green-50 p-3 border border-green-100 rounded-md">
+                    <div className="flex items-center space-x-2 text-sm font-medium">
+                      <div className="flex h-5 w-5 items-center justify-center rounded-full bg-green-500">
+                        <Check className="h-3 w-3 text-white" />
+                      </div>
+                      <span className="text-green-800">Automatic private key generation</span>
+                    </div>
+                    <p className="text-xs text-green-700 mt-1 ml-7">
+                      The system automatically generates ROQKD (Romanian Quantum Key Distribution) 
+                      private keys with Romanian validation code.
+                    </p>
+                  </div>
                 </CardContent>
-                <CardFooter>
-                  <Button onClick={() => handleDemo("key")}>Generate Quantum Key</Button>
+                <CardFooter className="flex flex-col sm:flex-row gap-2">
+                  <Button onClick={() => handleDemo("key")}>Generate Private Key</Button>
+                  <Button variant="outline" onClick={() => {
+                    setDemoType("key");
+                    const publicKey = generateQuantumKey(false); // Generate public key
+                    setDemoResult(
+                      `Generated ${publicKey.isPrivate ? 'private' : 'public'} quantum-secure key:\n\n` + 
+                      `${publicKey.key}\n\n` + 
+                      `Type: ${publicKey.isPrivate ? 'Private (ROQKD)' : 'Public (PUBQK)'}\n` + 
+                      `Romanian validation code: ${publicKey.validationCode}\n` +
+                      `Expires: ${publicKey.expiresIn}\n` +
+                      `Protected: ${publicKey.isPrivate ? 'Yes' : 'No'}`
+                    );
+                    setShowDemo(true);
+                  }}>Generate Public Key</Button>
                 </CardFooter>
               </Card>
             </div>
