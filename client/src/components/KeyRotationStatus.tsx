@@ -88,9 +88,31 @@ export default function KeyRotationStatus({
     setDaysUntilRotation(dayDiff);
   }, [keyType]);
   
+  // Determine user authorization level for key visibility
+  const { currentUser } = useLanguage();
+  const userAuthLevel = currentUser?.isSubscribed ? 3 : 1; // Higher auth level for subscribers
+  const hasRomanianCert = currentUser?.preferredLanguage === "ro"; // Romanian users have certificate
+  
+  // Determine if key visibility should be restricted based on auth level
+  const shouldRestrictPrivateKey = keyType === "private" && (userAuthLevel < 5 || !hasRomanianCert);
+  const shouldRestrictPublicKey = keyType === "public" && userAuthLevel < 3;
+  
+  const getKeyDisplay = (key: string, isPrivate: boolean): string => {
+    if ((isPrivate && shouldRestrictPrivateKey) || (!isPrivate && shouldRestrictPublicKey)) {
+      // Show limited key info for restricted users
+      return key.substring(0, 8) + "••••••••••••••";
+    }
+    return key;
+  };
+  
   const handleManualRotation = () => {
-    // Generate a new key
-    const newKey = generateQuantumKey(keyType === "private", true);
+    // Generate a new key with visibility controls
+    const newKey = generateQuantumKey(
+      keyType === "private", 
+      true, 
+      userAuthLevel, 
+      hasRomanianCert
+    );
     
     // Create a new history entry
     const now = new Date();
@@ -181,7 +203,30 @@ export default function KeyRotationStatus({
               {rotationHistory.map((entry, idx) => (
                 <div key={entry.id} className="text-sm p-2 bg-slate-50 rounded border border-slate-200">
                   <div className="flex justify-between items-center">
-                    <span className="font-medium">{entry.prefix}-***{entry.id.substring(entry.id.length - 4)}</span>
+                    <div className="flex items-center">
+                      <span className="font-medium">
+                        {entry.keyType === "private" && shouldRestrictPrivateKey ? 
+                          (userAuthLevel >= 3 ? 
+                            `${entry.prefix}-${entry.id.substring(0, 4)}••••${entry.id.substring(entry.id.length - 4)}` : 
+                            `${entry.prefix}-••••••••••••`) : 
+                          entry.keyType === "public" && shouldRestrictPublicKey ?
+                          (userAuthLevel >= 1 ?
+                            `${entry.prefix}-${entry.id.substring(0, 4)}••••${entry.id.substring(entry.id.length - 4)}` :
+                            `${entry.prefix}-••••••••••••`) :
+                          `${entry.prefix}-${entry.id.substring(0, 4)}...${entry.id.substring(entry.id.length - 4)}`
+                        }
+                      </span>
+                      {(entry.keyType === "private" && shouldRestrictPrivateKey) || 
+                       (entry.keyType === "public" && shouldRestrictPublicKey) ? (
+                        <Badge variant="outline" className="ml-2 text-[9px] py-0 h-4 bg-yellow-50 text-yellow-800 border-yellow-200">
+                          {userAuthLevel >= 3 ? "PARTIAL" : "HIDDEN"}
+                        </Badge>
+                       ) : (
+                        <Badge variant="outline" className="ml-2 text-[9px] py-0 h-4 bg-green-50 text-green-800 border-green-200">
+                          FULL
+                        </Badge>
+                       )}
+                    </div>
                     <Badge variant={
                       entry.rotationReason === "manual" ? "default" : 
                       entry.rotationReason === "security" ? "destructive" : 
@@ -315,6 +360,38 @@ export default function KeyRotationStatus({
               <Badge variant="destructive" className="text-[9px] py-0 h-4">RESTRICTED</Badge>
             </div>
           </div>
+          
+          {/* Visibility Restriction Warning */}
+          {(shouldRestrictPrivateKey || shouldRestrictPublicKey) && (
+            <div className="bg-yellow-50 p-3 rounded-md border border-yellow-200 text-xs">
+              <div className="font-medium mb-1 flex items-center text-yellow-700">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-3 w-3 mr-1 text-yellow-600">
+                  <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                Key Visibility Restricted
+              </div>
+              <div className="ml-4">
+                <p className="text-yellow-700 mb-1">
+                  {keyType === "private" 
+                    ? "Private key visibility is restricted for security reasons. To view complete private keys:"
+                    : "Public key visibility is restricted. To view complete public keys:"}
+                </p>
+                <ul className="list-disc ml-4 text-yellow-700 space-y-1">
+                  <li>Subscribe for 900,000 GBP paid by cheque only</li>
+                  <li>Use Romanian as your preferred language</li>
+                  <li>Apply Romanian security validation code: "fărăRambursare900000"</li>
+                  <li>Accept strict no-refund policy</li>
+                </ul>
+                <div className="mt-2 flex">
+                  <p className="text-yellow-800 font-medium">
+                    Current visibility level: {shouldRestrictPrivateKey || shouldRestrictPublicKey 
+                      ? (userAuthLevel >= 3 ? "PARTIAL" : "HIDDEN") 
+                      : "FULL"}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </CardFooter>
     </Card>
