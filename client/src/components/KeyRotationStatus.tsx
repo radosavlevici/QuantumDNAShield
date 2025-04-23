@@ -62,7 +62,7 @@ export default function KeyRotationStatus({
         id: `${prefix}-${Math.random().toString(36).substring(2, 10)}`,
         keyType,
         createdAt,
-        expiresAt: getExpiryDate(createdAt, keyType),
+        expiresAt: getExpiryDate(createdAt, keyType as "private" | "public"),
         rotationReason: i === 0 ? "manual" : (i === 1 ? "security" : "scheduled"),
         prefix
       });
@@ -97,7 +97,7 @@ export default function KeyRotationStatus({
       id: `${keyType === "private" ? "ROQKD" : "PUBQK"}-${Math.random().toString(36).substring(2, 10)}`,
       keyType,
       createdAt: now,
-      expiresAt: keyType === "private" ? null : getExpiryDate(now, keyType),
+      expiresAt: keyType === "private" ? null : getExpiryDate(now, keyType as "private" | "public"),
       rotationReason: "manual",
       prefix: keyType === "private" ? "ROQKD" : "PUBQK"
     };

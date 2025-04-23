@@ -418,7 +418,30 @@ const DnaSecurity = () => {
               that traditional authentication methods cannot match.
             </p>
             
-            <div className="grid grid-cols-1 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <CardTitle>Quantum Key Management</CardTitle>
+                    <Key className="h-6 w-6 text-blue-600" />
+                  </div>
+                  <CardDescription>
+                    Secure key rotation and lifecycle management
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-gray-600">
+                    Our Romanian-based cryptographic key management system automatically handles secure key rotation and lifecycle management for both private and public keys, ensuring maximum security for your DNA authentication.
+                  </p>
+                  
+                  <div className="mt-3 bg-blue-50 p-3 border border-blue-100 rounded-md">
+                    <div className="text-xs text-blue-700">
+                      <span className="font-medium">Romanian Key Security:</span> All keys include Romanian validation codes and follow strict Romanian cryptographic standards with the no-refund Romanian security protocol "fărăRambursare900000".
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              
               <Card>
                 <CardHeader>
                   <div className="flex items-center justify-between">
@@ -436,6 +459,25 @@ const DnaSecurity = () => {
                   </p>
                 </CardContent>
               </Card>
+            </div>
+            
+            <div className="mt-8">
+              <KeyRotationStatus 
+                initialKeyType="private"
+                onManualRotate={(keyType) => {
+                  setDemoType("key-rotation");
+                  const key = generateQuantumKey(keyType === "private", true);
+                  setDemoResult(
+                    `Manually rotated ${keyType} key\n\n` +
+                    `New key generated: ${key.key.substring(0, 12)}...\n` +
+                    `Type: ${key.isPrivate ? 'Private (ROQKD)' : 'Public (PUBQK)'}\n` +
+                    `Romanian validation code: ${key.validationCode}\n` +
+                    `Auto-rotation: ${key.autoRotation ? 'Enabled' : 'Disabled'}\n` +
+                    (key.autoRotation ? `Rotation period: ${key.rotationPeriod}` : '')
+                  );
+                  setShowDemo(true);
+                }}
+              />
             </div>
           </TabsContent>
           
@@ -477,6 +519,7 @@ const DnaSecurity = () => {
                 {demoType === "verify" && "DNA Integrity Verification"}
                 {demoType === "tamper" && "Tamper Detection Result"}
                 {demoType === "key" && "Quantum Key Generation"}
+                {demoType === "key-rotation" && "Quantum Key Rotation"}
                 {demoType === "copyright" && "Copyright Protection Result"}
                 {demoType === "verify-copyright" && "Copyright Verification Result"}
                 {demoType === "premium" && "Premium Registration - No Refund Policy"}
