@@ -286,23 +286,43 @@ const DnaSecurity = () => {
                     <strong>Romanian Security Process:</strong> Our verification uses a special Romanian
                     secret code validation system for additional security.
                   </div>
-                  <div className="mt-2">
-                    <label className="flex items-center space-x-2 text-sm font-medium">
-                      <input
-                        type="checkbox"
-                        className="h-4 w-4 rounded border-gray-300"
-                        checked={true}
-                        readOnly
-                      />
-                      <span>Automatic verification</span>
-                    </label>
-                    <p className="text-xs text-gray-500 mt-1 ml-6">
-                      Our system automatically verifies DNA copyright on all sequences
+                  <div className="mt-2 bg-green-50 p-3 border border-green-100 rounded-md">
+                    <div className="flex items-center space-x-2 text-sm font-medium">
+                      <div className="flex h-5 w-5 items-center justify-center rounded-full bg-green-500">
+                        <Check className="h-3 w-3 text-white" />
+                      </div>
+                      <span className="text-green-800">Automatic verification active</span>
+                    </div>
+                    <p className="text-xs text-green-700 mt-1 ml-7">
+                      Our quantum-enhanced system automatically verifies all DNA sequences against our 
+                      protected database. Romanian validation code fărăRambursare900000 is used for 
+                      additional security.
                     </p>
+                    <div className="mt-2 ml-7 text-xs flex items-center text-gray-600">
+                      <AlertTriangle className="h-3 w-3 mr-1 text-amber-500" />
+                      <span>Protected sequences include those owned by Ervin Remus Radosavlevici and Romanian DNA Institute</span>
+                    </div>
                   </div>
                 </CardContent>
-                <CardFooter>
+                <CardFooter className="flex flex-col sm:flex-row gap-2">
                   <Button onClick={() => handleDemo("verify-copyright")}>Verify Copyright</Button>
+                  <Button 
+                    variant="outline" 
+                    onClick={() => {
+                      setDemoType("verify-copyright");
+                      setSampleDna("ATGCTAGCTAGCTAGCTAGCTA");
+                      const verificationResult = automaticCopyrightVerification("ATGCTAGCTAGCTAGCTAGCTA");
+                      setDemoResult(
+                        `Automatic verification successful ✓\n` +
+                        `Protected sequence detected\n` +
+                        `Owner: ${verificationResult.owner}\n` +
+                        `Romanian validation code: ${verificationResult.validationCode}`
+                      );
+                      setShowDemo(true);
+                    }}
+                  >
+                    Demo Auto-Verification
+                  </Button>
                 </CardFooter>
               </Card>
               

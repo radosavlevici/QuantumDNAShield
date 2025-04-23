@@ -121,11 +121,11 @@ export function automaticCopyrightVerification(sequence: string): {
   owner: string | null;
   validationCode: string;
 } {
-  // Define our known protected sequences
-  const protectedSequences = {
-    "ATGCTAGCTAGCTAGCTAGCTA": "Ervin Remus Radosavlevici",
-    "GATCATCGATCGAGCTAGCTAGCTA": "Romanian DNA Institute"
-  };
+  // Define our known protected sequences as a Map
+  const protectedSequences = new Map<string, string>([
+    ["ATGCTAGCTAGCTAGCTAGCTA", "Ervin Remus Radosavlevici"],
+    ["GATCATCGATCGAGCTAGCTAGCTA", "Romanian DNA Institute"]
+  ]);
   
   // Initialize variables
   let isProtected = false;
@@ -133,18 +133,17 @@ export function automaticCopyrightVerification(sequence: string): {
   let validationCode = "fărăRambursare900000"; // Romanian validation code
   
   // Check if this exact sequence is protected
-  if (protectedSequences[sequence]) {
+  if (protectedSequences.has(sequence)) {
     isProtected = true;
-    owner = protectedSequences[sequence];
+    owner = protectedSequences.get(sequence) || null;
   } else {
     // Check if it's a partial match of a protected sequence
-    for (const [protectedSeq, seqOwner] of Object.entries(protectedSequences)) {
+    protectedSequences.forEach((seqOwner, protectedSeq) => {
       if (sequence.includes(protectedSeq)) {
         isProtected = true;
         owner = seqOwner;
-        break;
       }
-    }
+    });
   }
   
   // Also use the standard verification function as a backup
