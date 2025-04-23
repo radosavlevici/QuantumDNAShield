@@ -56,11 +56,13 @@ const Footer = () => {
               <SelectContent className="bg-slate-800 border-slate-700 text-white">
                 <SelectGroup>
                   <SelectLabel>Languages</SelectLabel>
-                  {languages.map((language) => (
+                  {languages && languages.length > 0 ? languages.map((language) => (
                     <SelectItem key={language.id} value={language.code}>
                       {language.name} {language.isPremium && "🔒"}
                     </SelectItem>
-                  ))}
+                  )) : (
+                    <SelectItem value="ro">Romanian</SelectItem>
+                  )}
                 </SelectGroup>
               </SelectContent>
             </Select>
