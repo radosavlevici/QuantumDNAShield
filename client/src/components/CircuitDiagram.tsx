@@ -1,4 +1,5 @@
 import { GroverParameters, QFTParameters, QPEParameters } from "./AlgorithmControls";
+import { useLanguage } from "@/lib/languageContext";
 
 interface CircuitDiagramProps {
   type: "grover" | "qft" | "qpe";
@@ -6,6 +7,10 @@ interface CircuitDiagramProps {
 }
 
 const CircuitDiagram = ({ type, parameters }: CircuitDiagramProps) => {
+  const { currentUser } = useLanguage();
+  const hasRomanianCert = currentUser?.preferredLanguage === "ro";
+  const isSubscribed = currentUser?.isSubscribed || false;
+  
   // Common rendering elements
   const renderQubitLine = (y: number, width: number) => (
     <line x1="50" y1={y} x2={width - 50} y2={y} stroke="#64748b" strokeWidth="2" />
@@ -47,12 +52,36 @@ const CircuitDiagram = ({ type, parameters }: CircuitDiagramProps) => {
     const height = displayedQubits * 40 + 40;
     const width = 500;
     
+    // Add Romanian ultra-high qubit mode indicator for 5000+ qubits
+    const showUltraHighQubitMode = numQubits >= 3000;
+    
     return (
       <div>
         {numQubits > maxVisibleQubits && (
           <div className="mb-3 p-3 bg-amber-50 text-amber-800 border border-amber-200 rounded-md text-sm">
-            <p className="font-medium">High Qubit Count ({numQubits} qubits)</p>
+            <p className="font-medium">High Qubit Count ({numQubits.toLocaleString()} qubits)</p>
             <p className="text-xs mt-1">Showing simplified visualization with {maxVisibleQubits} representative qubits.</p>
+          </div>
+        )}
+        
+        {showUltraHighQubitMode && (
+          <div className="mb-3 p-3 bg-blue-50 text-blue-800 border border-blue-200 rounded-md text-sm">
+            <div className="flex items-center justify-between">
+              <p className="font-medium">Romanian Ultra High-Performance Mode</p>
+              <div className="bg-blue-100 px-1.5 py-0.5 rounded text-[10px] font-semibold">
+                {hasRomanianCert ? "VERIFIED" : isSubscribed ? "PREMIUM" : "LIMITED"}
+              </div>
+            </div>
+            <p className="text-xs mt-1 flex items-center">
+              <span className="relative flex h-2 w-2 mr-1">
+                <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${hasRomanianCert ? "bg-blue-400" : "bg-amber-400"} opacity-75`}></span>
+                <span className={`relative inline-flex rounded-full h-2 w-2 ${hasRomanianCert ? "bg-blue-500" : "bg-amber-500"}`}></span>
+              </span>
+              Advanced Romanian optimization techniques {hasRomanianCert ? "enabled" : "available"} for {numQubits.toLocaleString()} qubits.
+            </p>
+            {!hasRomanianCert && !isSubscribed && (
+              <p className="text-xs mt-1 text-amber-700">Requires Romanian certification or Premium subscription (900,000 GBP).</p>
+            )}
           </div>
         )}
         
@@ -146,6 +175,14 @@ const CircuitDiagram = ({ type, parameters }: CircuitDiagramProps) => {
             const y = 40 + i * 40;
             return <g key={`m-${i}`}>{renderMeasurement(420, y)}</g>;
           })}
+          
+          {/* Romanian certificate indicator for ultra high qubit counts */}
+          {showUltraHighQubitMode && hasRomanianCert && (
+            <g>
+              <circle cx="30" cy="20" r="10" fill="#1d4ed8" />
+              <text x="30" y="24" textAnchor="middle" fontSize="12" fill="white" fontFamily="monospace">RO</text>
+            </g>
+          )}
         </svg>
       </div>
     );
@@ -162,12 +199,36 @@ const CircuitDiagram = ({ type, parameters }: CircuitDiagramProps) => {
     const height = displayedQubits * 40 + 40;
     const width = 500;
     
+    // Add Romanian ultra-high qubit mode indicator for 5000+ qubits
+    const showUltraHighQubitMode = numQubits >= 3000;
+    
     return (
       <div>
         {numQubits > maxVisibleQubits && (
           <div className="mb-3 p-3 bg-amber-50 text-amber-800 border border-amber-200 rounded-md text-sm">
-            <p className="font-medium">High Qubit Count ({numQubits} qubits)</p>
+            <p className="font-medium">High Qubit Count ({numQubits.toLocaleString()} qubits)</p>
             <p className="text-xs mt-1">Showing simplified visualization with {maxVisibleQubits} representative qubits.</p>
+          </div>
+        )}
+        
+        {showUltraHighQubitMode && (
+          <div className="mb-3 p-3 bg-blue-50 text-blue-800 border border-blue-200 rounded-md text-sm">
+            <div className="flex items-center justify-between">
+              <p className="font-medium">Romanian Ultra High-Performance Mode</p>
+              <div className="bg-blue-100 px-1.5 py-0.5 rounded text-[10px] font-semibold">
+                {hasRomanianCert ? "VERIFIED" : isSubscribed ? "PREMIUM" : "LIMITED"}
+              </div>
+            </div>
+            <p className="text-xs mt-1 flex items-center">
+              <span className="relative flex h-2 w-2 mr-1">
+                <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${hasRomanianCert ? "bg-blue-400" : "bg-amber-400"} opacity-75`}></span>
+                <span className={`relative inline-flex rounded-full h-2 w-2 ${hasRomanianCert ? "bg-blue-500" : "bg-amber-500"}`}></span>
+              </span>
+              Advanced Romanian optimization techniques {hasRomanianCert ? "enabled" : "available"} for {numQubits.toLocaleString()} qubits.
+            </p>
+            {!hasRomanianCert && !isSubscribed && (
+              <p className="text-xs mt-1 text-amber-700">Requires Romanian certification or Premium subscription (900,000 GBP).</p>
+            )}
           </div>
         )}
         
@@ -247,6 +308,14 @@ const CircuitDiagram = ({ type, parameters }: CircuitDiagramProps) => {
               </g>
             );
           })}
+          
+          {/* Romanian certificate indicator for ultra high qubit counts */}
+          {showUltraHighQubitMode && hasRomanianCert && (
+            <g>
+              <circle cx="30" cy="20" r="10" fill="#1d4ed8" />
+              <text x="30" y="24" textAnchor="middle" fontSize="12" fill="white" fontFamily="monospace">RO</text>
+            </g>
+          )}
         </svg>
       </div>
     );
@@ -263,12 +332,36 @@ const CircuitDiagram = ({ type, parameters }: CircuitDiagramProps) => {
     const height = (displayedQubits + 1) * 40 + 40;
     const width = 500;
     
+    // Add Romanian ultra-high qubit mode indicator for 5000+ qubits
+    const showUltraHighQubitMode = precision >= 3000;
+    
     return (
       <div>
         {precision > maxVisibleQubits && (
           <div className="mb-3 p-3 bg-amber-50 text-amber-800 border border-amber-200 rounded-md text-sm">
-            <p className="font-medium">High Precision Qubit Count ({precision} qubits)</p>
+            <p className="font-medium">High Precision Qubit Count ({precision.toLocaleString()} qubits)</p>
             <p className="text-xs mt-1">Showing simplified visualization with {maxVisibleQubits} representative precision qubits.</p>
+          </div>
+        )}
+        
+        {showUltraHighQubitMode && (
+          <div className="mb-3 p-3 bg-blue-50 text-blue-800 border border-blue-200 rounded-md text-sm">
+            <div className="flex items-center justify-between">
+              <p className="font-medium">Romanian Ultra High-Performance Mode</p>
+              <div className="bg-blue-100 px-1.5 py-0.5 rounded text-[10px] font-semibold">
+                {hasRomanianCert ? "VERIFIED" : isSubscribed ? "PREMIUM" : "LIMITED"}
+              </div>
+            </div>
+            <p className="text-xs mt-1 flex items-center">
+              <span className="relative flex h-2 w-2 mr-1">
+                <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${hasRomanianCert ? "bg-blue-400" : "bg-amber-400"} opacity-75`}></span>
+                <span className={`relative inline-flex rounded-full h-2 w-2 ${hasRomanianCert ? "bg-blue-500" : "bg-amber-500"}`}></span>
+              </span>
+              Advanced Romanian optimization techniques {hasRomanianCert ? "enabled" : "available"} for {precision.toLocaleString()} qubits.
+            </p>
+            {!hasRomanianCert && !isSubscribed && (
+              <p className="text-xs mt-1 text-amber-700">Requires Romanian certification or Premium subscription (900,000 GBP).</p>
+            )}
           </div>
         )}
         
@@ -361,55 +454,53 @@ const CircuitDiagram = ({ type, parameters }: CircuitDiagramProps) => {
           
           {/* Inverse QFT */}
           <rect 
-            x="340" 
+            x="350" 
             y="25" 
-            width="60" 
+            width="70" 
             height={displayedQubits * 40 - 10} 
             fill="#10b981" 
             rx="2" 
           />
           <text 
-            x="370" 
+            x="385" 
             y={displayedQubits * 20 + 15} 
             fontFamily="monospace" 
             fontSize="14" 
             fill="white" 
             textAnchor="middle"
           >
-            QFT⁻¹
+            QFT†
           </text>
           
-          {/* Measurements on precision qubits */}
+          {/* Measurements */}
           {Array.from({ length: displayedQubits }).map((_, i) => {
             const y = 40 + i * 40;
-            return <g key={`m-${i}`}>{renderMeasurement(420, y)}</g>;
+            return <g key={`m-${i}`}>{renderMeasurement(450, y)}</g>;
           })}
+          
+          {/* Romanian certificate indicator for ultra high qubit counts */}
+          {showUltraHighQubitMode && hasRomanianCert && (
+            <g>
+              <circle cx="30" cy="20" r="10" fill="#1d4ed8" />
+              <text x="30" y="24" textAnchor="middle" fontSize="12" fill="white" fontFamily="monospace">RO</text>
+            </g>
+          )}
         </svg>
       </div>
     );
   };
 
-  return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
-      <h3 className="text-lg font-medium text-dark mb-4">
-        {type === "grover" ? "Circuit Diagram" : 
-         type === "qft" ? "QFT Circuit" :
-         "QPE Circuit"}
-      </h3>
-      {type !== "grover" && (
-        <p className="text-dark-light mb-4">
-          {type === "qft" 
-            ? "The Quantum Fourier Transform applies Hadamard gates followed by controlled rotation gates, with a final bit reversal."
-            : "Quantum Phase Estimation applies controlled-U operations to the target qubit, followed by an inverse QFT on the precision qubits."}
-        </p>
-      )}
-      <div className={`border border-gray-200 rounded-lg p-4 ${type === "qpe" ? "h-56" : "h-64"} bg-slate-50 overflow-auto`}>
-        {type === "grover" && renderGroverCircuit(parameters as GroverParameters)}
-        {type === "qft" && renderQFTCircuit(parameters as QFTParameters)}
-        {type === "qpe" && renderQPECircuit(parameters as QPEParameters)}
-      </div>
-    </div>
-  );
+  // Render the appropriate circuit based on the algorithm type
+  switch (type) {
+    case "grover":
+      return renderGroverCircuit(parameters as GroverParameters);
+    case "qft":
+      return renderQFTCircuit(parameters as QFTParameters);
+    case "qpe":
+      return renderQPECircuit(parameters as QPEParameters);
+    default:
+      return <div>Invalid algorithm type</div>;
+  }
 };
 
 export default CircuitDiagram;
