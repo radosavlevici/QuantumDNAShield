@@ -1,0 +1,209 @@
+import { useEffect, useState } from "react";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
+import { generateQuantumKey } from "@/lib/securityUtils";
+
+interface KeyRotationHistoryEntry {
+  id: string;
+  keyType: "private" | "public";
+  createdAt: Date;
+  expiresAt: Date | null;
+  rotationReason: "scheduled" | "manual" | "security";
+  prefix: string;
+}
+
+interface KeyRotationStatusProps {
+  initialKeyType?: "private" | "public";
+  onManualRotate?: (keyType: "private" | "public") => void;
+}
+
+export default function KeyRotationStatus({ 
+  initialKeyType = "private", 
+  onManualRotate 
+}: KeyRotationStatusProps) {
+  const [keyType, setKeyType] = useState<"private" | "public">(initialKeyType);
+  const [rotationHistory, setRotationHistory] = useState<KeyRotationHistoryEntry[]>([]);
+  const [nextRotationDate, setNextRotationDate] = useState<Date | null>(null);
+  const [daysUntilRotation, setDaysUntilRotation] = useState<number>(0);
+  
+  // Generate random date in the past (1-30 days ago)
+  const getRandomPastDate = (maxDays: number = 30) => {
+    const date = new Date();
+    const daysAgo = Math.floor(Math.random() * maxDays) + 1;
+    date.setDate(date.getDate() - daysAgo);
+    return date;
+  };
+  
+  // Generate expiry date based on key type
+  const getExpiryDate = (fromDate: Date, keyType: "private" | "public") => {
+    const date = new Date(fromDate);
+    if (keyType === "private") {
+      date.setDate(date.getDate() + 90); // 90 days for private keys
+    } else {
+      date.setDate(date.getDate() + 7); // 7 days for public keys
+    }
+    return date;
+  };
+  
+  // Generate rotation history on component mount and when key type changes
+  useEffect(() => {
+    const isPrivate = keyType === "private";
+    const prefix = isPrivate ? "ROQKD" : "PUBQK";
+    const rotationPeriod = isPrivate ? 90 : 7;
+    
+    // Generate 3 past rotation entries
+    const historyEntries: KeyRotationHistoryEntry[] = [];
+    
+    for (let i = 0; i < 3; i++) {
+      const createdAt = getRandomPastDate(30);
+      historyEntries.push({
+        id: `${prefix}-${Math.random().toString(36).substring(2, 10)}`,
+        keyType,
+        createdAt,
+        expiresAt: getExpiryDate(createdAt, keyType),
+        rotationReason: i === 0 ? "manual" : (i === 1 ? "security" : "scheduled"),
+        prefix
+      });
+    }
+    
+    // Sort by date (newest first)
+    historyEntries.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+    
+    // Set rotation history
+    setRotationHistory(historyEntries);
+    
+    // Calculate next rotation date
+    const lastRotation = historyEntries[0].createdAt;
+    const nextRotation = new Date(lastRotation);
+    nextRotation.setDate(nextRotation.getDate() + rotationPeriod);
+    setNextRotationDate(nextRotation);
+    
+    // Calculate days until next rotation
+    const today = new Date();
+    const timeDiff = nextRotation.getTime() - today.getTime();
+    const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    setDaysUntilRotation(dayDiff);
+  }, [keyType]);
+  
+  const handleManualRotation = () => {
+    // Generate a new key
+    const newKey = generateQuantumKey(keyType === "private", true);
+    
+    // Create a new history entry
+    const now = new Date();
+    const newEntry: KeyRotationHistoryEntry = {
+      id: `${keyType === "private" ? "ROQKD" : "PUBQK"}-${Math.random().toString(36).substring(2, 10)}`,
+      keyType,
+      createdAt: now,
+      expiresAt: keyType === "private" ? null : getExpiryDate(now, keyType),
+      rotationReason: "manual",
+      prefix: keyType === "private" ? "ROQKD" : "PUBQK"
+    };
+    
+    // Update rotation history
+    setRotationHistory(prev => [newEntry, ...prev.slice(0, 2)]);
+    
+    // Calculate next rotation date
+    const rotationPeriod = keyType === "private" ? 90 : 7;
+    const nextRotation = new Date(now);
+    nextRotation.setDate(nextRotation.getDate() + rotationPeriod);
+    setNextRotationDate(nextRotation);
+    
+    // Calculate days until next rotation
+    const timeDiff = nextRotation.getTime() - now.getTime();
+    const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    setDaysUntilRotation(dayDiff);
+    
+    // Call the callback if provided
+    if (onManualRotate) {
+      onManualRotate(keyType);
+    }
+  };
+  
+  const formatDate = (date: Date) => {
+    return date.toLocaleDateString('en-GB', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric'
+    });
+  };
+  
+  return (
+    <Card className="w-full">
+      <CardHeader>
+        <div className="flex items-center justify-between">
+          <CardTitle>Quantum Key Rotation Status</CardTitle>
+          <Badge variant={keyType === "private" ? "default" : "outline"}>
+            {keyType === "private" ? "ROQKD Private" : "PUBQK Public"}
+          </Badge>
+        </div>
+        <CardDescription>
+          Auto-rotation {keyType === "private" ? "every 90 days" : "every 7 days"}
+        </CardDescription>
+      </CardHeader>
+      
+      <CardContent>
+        <div className="space-y-4">
+          <div className="flex justify-between items-center p-3 bg-slate-50 rounded-lg border border-slate-200">
+            <div>
+              <span className="text-sm font-medium text-slate-700">Next scheduled rotation</span>
+              <p className="text-sm text-slate-500">{nextRotationDate ? formatDate(nextRotationDate) : "N/A"}</p>
+            </div>
+            <Badge variant={daysUntilRotation <= 3 ? "destructive" : daysUntilRotation <= 7 ? "outline" : "secondary"}>
+              {daysUntilRotation} days
+            </Badge>
+          </div>
+          
+          <div>
+            <h4 className="text-sm font-medium mb-2">Recent key rotations</h4>
+            <div className="space-y-3">
+              {rotationHistory.map((entry, idx) => (
+                <div key={entry.id} className="text-sm p-2 bg-slate-50 rounded border border-slate-200">
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium">{entry.prefix}-***{entry.id.substring(entry.id.length - 4)}</span>
+                    <Badge variant={
+                      entry.rotationReason === "manual" ? "default" : 
+                      entry.rotationReason === "security" ? "destructive" : 
+                      "outline"
+                    }>
+                      {entry.rotationReason}
+                    </Badge>
+                  </div>
+                  <div className="flex justify-between mt-1 text-xs text-slate-500">
+                    <span>Created: {formatDate(entry.createdAt)}</span>
+                    {entry.expiresAt && <span>Expires: {formatDate(entry.expiresAt)}</span>}
+                    {!entry.expiresAt && <span>Never expires</span>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </CardContent>
+      
+      <CardFooter className="flex justify-between border-t pt-4">
+        <div className="flex space-x-2">
+          <Button 
+            variant={keyType === "private" ? "default" : "outline"}
+            size="sm"
+            onClick={() => setKeyType("private")}
+          >
+            Private Keys
+          </Button>
+          <Button 
+            variant={keyType === "public" ? "default" : "outline"}
+            size="sm"
+            onClick={() => setKeyType("public")}
+          >
+            Public Keys
+          </Button>
+        </div>
+        <Button onClick={handleManualRotation} size="sm">
+          Rotate {keyType} key now
+        </Button>
+      </CardFooter>
+    </Card>
+  );
+}
