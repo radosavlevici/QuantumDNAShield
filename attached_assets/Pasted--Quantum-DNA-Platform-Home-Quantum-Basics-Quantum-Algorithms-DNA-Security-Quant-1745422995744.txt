@@ -1,0 +1,145 @@
+
+Quantum DNA Platform
+
+    Home
+    Quantum Basics
+    Quantum Algorithms
+    DNA Security
+    Quantum ML
+    Resources
+
+Quantum Algorithms
+
+Explore powerful quantum algorithms that provide computational advantages
+Quantum Computational Advantage
+
+Quantum algorithms leverage the principles of quantum mechanics to solve certain problems more efficiently than classical algorithms. These algorithms can provide exponential speedups for specific computational tasks.
+
+Our platform features interactive demonstrations of key quantum algorithms, including Grover's search algorithm, Shor's factoring algorithm, and quantum phase estimation.
+© 2025 Ervin Remus Radosavlevici
+Interactive Algorithm Demos
+Grover's Search Algorithm
+
+Grover's algorithm provides a quadratic speedup for unstructured search problems, finding a marked item in an unsorted database of N items in approximately √N steps instead of the N steps required by classical algorithms.
+Number of qubits:
+Target state:
+Circuit Diagram
+Measurement Results
+
+After running Grover's algorithm, the target state |0110⟩ has been amplified to have the highest probability of measurement.
+
+Optimal number of iterations: 3
+Quantum Fourier Transform
+
+The Quantum Fourier Transform (QFT) is a fundamental building block for many quantum algorithms, including Shor's algorithm and quantum phase estimation. It performs a Fourier transform on quantum amplitudes exponentially faster than classical Fast Fourier Transform.
+Number of qubits:
+Input state:
+QFT Circuit
+
+The Quantum Fourier Transform applies Hadamard gates followed by controlled rotation gates, with a final bit reversal.
+State Visualization
+
+The QFT transforms a computational basis state into a superposition with specific phase relationships.
+Quantum Phase Estimation
+
+Quantum Phase Estimation (QPE) determines the eigenphase of a unitary operator, with applications in quantum chemistry, optimization, and factoring algorithms.
+Precision qubits:
+Target phase (θ):
+QPE Circuit
+
+Quantum Phase Estimation applies controlled-U operations to the target qubit, followed by an inverse QFT on the precision qubits.
+Estimated Phase
+
+With 5 qubits, QPE can estimate the phase with precision of approximately 0.03125.
+Quantum vs. Classical Complexity
+Problem 	Classical Complexity 	Quantum Complexity 	Speedup
+Unstructured Search 	O(N) 	O(√N) (Grover) 	Quadratic
+Integer Factorization 	O(e^(log N)^(1/3)) 	O((log N)^3) (Shor) 	Exponential
+Discrete Logarithm 	O(√N) 	O((log N)^3) (Shor) 	Exponential
+Quantum Simulation 	O(2^N) 	O(N^k) 	Exponential
+Linear Systems 	O(N^3) 	O(log N) (HHL) 	Exponential
+Technical Implementation Details
+Grover's Algorithm Implementation
+
+Grover's algorithm consists of repeated applications of the Grover operator, which includes an oracle that marks the target state and a diffusion operator that amplifies the amplitude of the marked state.
+
+# Simplified Grover implementation
+def create_grover_circuit(marked_state, n_qubits):
+    # Create circuit with n qubits
+    qc = QuantumCircuit(n_qubits)
+    
+    # Apply H-gates to put qubits in superposition
+    for qubit in range(n_qubits):
+        qc.h(qubit)
+    
+    # Number of Grover iterations
+    iterations = int(np.pi/4 * np.sqrt(2**n_qubits))
+    
+    for _ in range(iterations):
+        # Oracle - marks the target state
+        qc.append(create_oracle(marked_state, n_qubits), range(n_qubits))
+        
+        # Diffusion operator - amplifies marked state
+        qc.append(create_diffusion(n_qubits), range(n_qubits))
+    
+    # Measure all qubits
+    qc.measure_all()
+    
+    return qc
+                            
+
+Quantum Fourier Transform Circuit
+
+The QFT implementation requires Hadamard gates and controlled rotation gates. For an n-qubit system, it transforms the state into a superposition of basis states with complex phases determined by the Fourier transform.
+
+# Simplified QFT implementation
+def create_qft_circuit(n_qubits):
+    # Create a quantum circuit with n qubits
+    qc = QuantumCircuit(n_qubits)
+    
+    # Implement QFT
+    for i in range(n_qubits):
+        qc.h(i)
+        
+        for j in range(i+1, n_qubits):
+            # Apply controlled phase rotation
+            qc.cp(2*np.pi/2**(j-i+1), j, i)
+    
+    # Reverse the order of qubits
+    for i in range(n_qubits//2):
+        qc.swap(i, n_qubits-i-1)
+        
+    return qc
+                            
+
+Quantum Phase Estimation
+
+QPE uses the inverse QFT to extract the phase information from a unitary operator. It requires precision qubits (for the binary representation of the phase) and a target qubit (eigenstate of the unitary).
+
+# Simplified QPE implementation
+def quantum_phase_estimation(unitary, n_precision, target_state):
+    # Create circuit with precision qubits + 1 target qubit
+    qc = QuantumCircuit(n_precision + 1, n_precision)
+    
+    # Prepare the target state
+    qc.initialize(target_state, n_precision)
+    
+    # Put precision qubits in superposition
+    for i in range(n_precision):
+        qc.h(i)
+    
+    # Apply controlled unitary operations
+    for i in range(n_precision):
+        # Apply unitary 2^i times controlled on the i-th qubit
+        qc.append(controlled_unitary(unitary, 2**i), 
+                 [i] + [n_precision])
+    
+    # Apply inverse QFT to precision qubits
+    qc.append(inverse_qft(n_precision), range(n_precision))
+    
+    # Measure precision qubits
+    qc.measure(range(n_precision), range(n_precision))
+    
+    return qc
+                            
+
