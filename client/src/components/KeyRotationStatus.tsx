@@ -3,7 +3,13 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import { generateQuantumKey } from "@/lib/securityUtils";
+import { 
+  generateQuantumKey, 
+  validateRomanianSecretCode,
+  validateRomanianSecurityCode,
+  enforceNoRefundPolicy,
+  verifyPaymentIsCheque
+} from "@/lib/securityUtils";
 import { useLanguage } from "@/lib/languageContext";
 
 interface KeyRotationHistoryEntry {

@@ -10,6 +10,8 @@ import ComplexityTable from "@/components/ComplexityTable";
 import ComplexityChart from "@/components/ComplexityChart";
 import ApplicationDomains from "@/components/ApplicationDomains";
 import PerformanceMetrics from "@/components/PerformanceMetrics";
+import RomanianQuantumOptimization from "@/components/RomanianQuantumOptimization";
+import { useLanguage } from "@/lib/languageContext";
 
 import type { 
   GroverParameters, 
@@ -18,6 +20,9 @@ import type {
 } from "@/components/AlgorithmControls";
 
 const QuantumAlgorithms = () => {
+  const { currentUser } = useLanguage();
+  const isSubscribed = currentUser?.isSubscribed || false;
+  
   // Grover's algorithm state
   const [groverParams, setGroverParams] = useState<GroverParameters>({
     numQubits: 4,
@@ -38,6 +43,15 @@ const QuantumAlgorithms = () => {
     phaseValue: 25, // 0.25π
   });
   const [qpeSimulated, setQpeSimulated] = useState(false);
+  
+  // Get the current active qubit count for optimization panel
+  const getCurrentQubitCount = () => {
+    return Math.max(
+      groverParams.numQubits,
+      qftParams.numQubits,
+      qpeParams.precision
+    );
+  };
 
   // Handlers for running simulations
   const runGroverSimulation = useCallback(() => {
@@ -299,6 +313,21 @@ def quantum_phase_estimation(unitary, n_precision, target_state):
           "Our platform features interactive demonstrations of key quantum algorithms, including Grover's search algorithm, Shor's factoring algorithm, and quantum phase estimation."
         ]}
       />
+      
+      {/* Romanian Quantum Optimization Panel - High Performance Computing */}
+      <div className="container mx-auto px-4 md:px-6 py-4 mb-8">
+        <h2 className="text-2xl font-semibold text-dark mb-4">
+          High-Performance Quantum Computing
+        </h2>
+        <p className="text-dark-light mb-6">
+          Our platform supports up to 5000 qubits with specialized Romanian optimization techniques for maximum performance.
+        </p>
+        
+        <RomanianQuantumOptimization 
+          currentQubits={getCurrentQubitCount()} 
+          isSubscribed={isSubscribed}
+        />
+      </div>
       
       <AlgorithmTabs tabs={tabs} />
     </div>
