@@ -18,7 +18,7 @@ const DnaSecurity = () => {
   const [protectedDna, setProtectedDna] = useState<string | null>(null);
   const [ownerName, setOwnerName] = useState("Ervin Remus Radosavlevici");
   
-  const { currentUser, isAuthenticated } = useLanguage();
+  const { currentUser, isAuthenticated, confirmPaymentMethod } = useLanguage();
   
   const handleDemo = (type: string) => {
     setDemoType(type);
@@ -190,6 +190,41 @@ const DnaSecurity = () => {
               tamper-proof digital watermarks to establish and prove ownership of synthetic DNA sequences.
             </p>
             
+            <div className="mb-6 p-4 bg-slate-50 border border-slate-200 rounded-md">
+              <h3 className="text-lg font-medium mb-2">Custom DNA Sequence</h3>
+              <div className="flex flex-col md:flex-row gap-4">
+                <div className="flex-1">
+                  <label htmlFor="dna-sequence" className="block text-sm font-medium text-gray-700 mb-1">
+                    DNA Sequence
+                  </label>
+                  <input
+                    id="dna-sequence"
+                    type="text"
+                    className="w-full p-2 border border-gray-300 rounded-md"
+                    placeholder="Enter DNA sequence (e.g., ATGCTAGC...)"
+                    value={sampleDna}
+                    onChange={(e) => setSampleDna(e.target.value)}
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Only A, T, G, C bases are allowed
+                  </p>
+                </div>
+                <div className="flex-1">
+                  <label htmlFor="owner-name" className="block text-sm font-medium text-gray-700 mb-1">
+                    Owner Name
+                  </label>
+                  <input
+                    id="owner-name"
+                    type="text"
+                    className="w-full p-2 border border-gray-300 rounded-md"
+                    placeholder="Enter your name"
+                    value={ownerName}
+                    onChange={(e) => setOwnerName(e.target.value)}
+                  />
+                </div>
+              </div>
+            </div>
+            
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <Card>
                 <CardHeader>
@@ -206,6 +241,10 @@ const DnaSecurity = () => {
                     Our system embeds a digital watermark into your DNA sequence that 
                     unequivocally establishes your ownership while preserving the functional properties.
                   </p>
+                  <div className="mt-4 text-xs text-gray-500">
+                    Uses quantum-resistant cryptographic techniques to ensure your copyright cannot be removed
+                    even with advanced quantum computing attacks.
+                  </div>
                 </CardContent>
                 <CardFooter>
                   <Button onClick={() => handleDemo("copyright")}>Add Copyright Protection</Button>
@@ -227,9 +266,40 @@ const DnaSecurity = () => {
                     Verify the ownership of any DNA sequence with our advanced verification system.
                     Quickly determine if a sequence is protected and who owns the rights to it.
                   </p>
+                  <div className="mt-4 text-xs bg-amber-50 p-2 rounded border border-amber-200">
+                    <strong>Romanian Security Process:</strong> Our verification uses a special Romanian
+                    secret code validation system for additional security.
+                  </div>
                 </CardContent>
                 <CardFooter>
                   <Button onClick={() => handleDemo("verify-copyright")}>Verify Copyright</Button>
+                </CardFooter>
+              </Card>
+              
+              <Card className="md:col-span-2">
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <CardTitle>Legal Protection</CardTitle>
+                    <Badge>No-Refund Policy Applies</Badge>
+                  </div>
+                  <CardDescription>
+                    DNA copyright registration with strict legal protection
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-gray-600">
+                    Our DNA copyright system includes legal protection services that enforce your 
+                    ownership rights worldwide. Premium subscription required for legal protection services.
+                  </p>
+                  <div className="mt-4 p-3 bg-blue-50 rounded border border-blue-200 text-sm">
+                    DNA copyright registration costs 900,000 GBP per sequence. Payment by cheque only.
+                    No refunds are provided under any circumstances as per our strict no-refund policy.
+                  </div>
+                </CardContent>
+                <CardFooter>
+                  <Button variant="outline" onClick={() => confirmPaymentMethod()}>
+                    Premium Registration Details
+                  </Button>
                 </CardFooter>
               </Card>
             </div>
