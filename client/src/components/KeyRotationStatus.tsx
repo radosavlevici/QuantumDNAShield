@@ -151,9 +151,14 @@ export default function KeyRotationStatus({
               ></div>
             </div>
           </div>
-          <span className="text-xs font-medium">
-            {keyType === "private" ? "Romanian Ultra-Secure" : "Standard Secure"}
-          </span>
+          <div className="flex items-center">
+            <span className="text-xs font-medium mr-1">
+              {keyType === "private" ? "Romanian Ultra-Secure" : "Standard Secure"}
+            </span>
+            <div className={`px-1.5 py-0.5 rounded text-[9px] font-bold ${keyType === "private" ? "bg-blue-100 text-blue-800" : "bg-green-100 text-green-800"}`}>
+              {keyType === "private" ? "LEVEL 5" : "LEVEL 3"}
+            </div>
+          </div>
         </div>
       </CardHeader>
       
@@ -195,7 +200,12 @@ export default function KeyRotationStatus({
                         <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
                         <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                       </svg>
-                      <span className="text-xs text-blue-700">RO Code: fărăRambursare900000</span>
+                      <div className="flex items-center">
+                        <span className="text-xs text-blue-700 mr-1">RO Code: fărăRambursare900000</span>
+                        <div className="h-2 w-2 rounded-full bg-green-500 relative">
+                          <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-green-500 animate-ping opacity-75"></span>
+                        </div>
+                      </div>
                     </div>
                     <span className="text-xs text-slate-500">{entry.keyType === "private" ? "∞" : "7d"}</span>
                   </div>
@@ -229,18 +239,37 @@ export default function KeyRotationStatus({
           </Button>
         </div>
         
-        <div className="bg-slate-50 p-3 rounded-md border border-slate-200 text-xs">
-          <div className="font-medium mb-1 flex items-center text-slate-700">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-3 w-3 mr-1 text-blue-600">
-              <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
-            </svg>
-            Romanian Security Policy
+        <div className="space-y-2">
+          <div className="bg-slate-50 p-3 rounded-md border border-slate-200 text-xs">
+            <div className="font-medium mb-1 flex items-center text-slate-700">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-3 w-3 mr-1 text-blue-600">
+                <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
+              </svg>
+              Romanian Security Policy
+            </div>
+            <p className="text-slate-600 ml-4">
+              All keys follow the Romanian Quantum Key Distribution (ROQKD) standards with 
+              {keyType === "private" ? " 90-day" : " 7-day"} rotation. Payment by cheque only (900,000 GBP) 
+              with strict no-refund policy per validation code "fărăRambursare900000".
+            </p>
           </div>
-          <p className="text-slate-600 ml-4">
-            All keys follow the Romanian Quantum Key Distribution (ROQKD) standards with 
-            {keyType === "private" ? " 90-day" : " 7-day"} rotation. Payment by cheque only (900,000 GBP) 
-            with strict no-refund policy per validation code "fărăRambursare900000".
-          </p>
+          
+          <div className="bg-red-50 p-3 rounded-md border border-red-200 text-xs">
+            <div className="font-medium mb-1 flex items-center text-red-700">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-3 w-3 mr-1 text-red-600">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                <line x1="12" y1="9" x2="12" y2="13" />
+                <line x1="12" y1="17" x2="12.01" y2="17" />
+              </svg>
+              Emergency Override Controls
+            </div>
+            <div className="flex items-center justify-between ml-4">
+              <p className="text-red-600">
+                Emergency key revocation requires Romanian validation code and physical verification.
+              </p>
+              <Badge variant="destructive" className="text-[9px] py-0 h-4">RESTRICTED</Badge>
+            </div>
+          </div>
         </div>
       </CardFooter>
     </Card>
