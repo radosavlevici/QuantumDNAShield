@@ -5,7 +5,15 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { protectDnaData, verifyDnaIntegrity, detectTampering, generateQuantumKey, addDnaCopyrightProtection, verifyDnaCopyright } from "@/lib/securityUtils";
+import { 
+  protectDnaData, 
+  verifyDnaIntegrity, 
+  detectTampering, 
+  generateQuantumKey, 
+  addDnaCopyrightProtection, 
+  verifyDnaCopyright,
+  automaticCopyrightVerification
+} from "@/lib/securityUtils";
 import { useLanguage } from "@/lib/languageContext";
 import { Shield, Lock, Key, AlertTriangle, FileText, Check } from "lucide-react";
 
@@ -47,8 +55,16 @@ const DnaSecurity = () => {
         setDemoResult(`DNA sequence copyright protected for ${ownerName}`);
         break;
       case "verify-copyright":
-        const owner = verifyDnaCopyright(protectedDna || sampleDna);
-        setDemoResult(owner ? `Copyright verified: Protected by ${owner}` : "No copyright protection found");
+        // Use the automatic copyright verification system
+        const verificationResult = automaticCopyrightVerification(protectedDna || sampleDna);
+        
+        if (verificationResult.isProtected) {
+          setDemoResult(`Copyright verification successful ✓\nProtected by: ${verificationResult.owner}\nRomanian validation code: ${verificationResult.validationCode}`);
+        } else {
+          // Fall back to manual verification
+          const owner = verifyDnaCopyright(protectedDna || sampleDna);
+          setDemoResult(owner ? `Copyright verified: Protected by ${owner}` : "No copyright protection found");
+        }
         break;
     }
     
@@ -269,6 +285,20 @@ const DnaSecurity = () => {
                   <div className="mt-4 text-xs bg-amber-50 p-2 rounded border border-amber-200">
                     <strong>Romanian Security Process:</strong> Our verification uses a special Romanian
                     secret code validation system for additional security.
+                  </div>
+                  <div className="mt-2">
+                    <label className="flex items-center space-x-2 text-sm font-medium">
+                      <input
+                        type="checkbox"
+                        className="h-4 w-4 rounded border-gray-300"
+                        checked={true}
+                        readOnly
+                      />
+                      <span>Automatic verification</span>
+                    </label>
+                    <p className="text-xs text-gray-500 mt-1 ml-6">
+                      Our system automatically verifies DNA copyright on all sequences
+                    </p>
                   </div>
                 </CardContent>
                 <CardFooter>

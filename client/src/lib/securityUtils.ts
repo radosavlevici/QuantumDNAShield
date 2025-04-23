@@ -111,3 +111,50 @@ export function enforceNoRefundPolicy(days: number): boolean {
 export function verifyPaymentIsCheque(method: string): boolean {
   return method.toLowerCase() === 'cheque';
 }
+
+/**
+ * Automatic copyright verification
+ * This function automatically checks all DNA sequences for copyright violations
+ */
+export function automaticCopyrightVerification(sequence: string): {
+  isProtected: boolean;
+  owner: string | null;
+  validationCode: string;
+} {
+  // Define our known protected sequences
+  const protectedSequences = {
+    "ATGCTAGCTAGCTAGCTAGCTA": "Ervin Remus Radosavlevici",
+    "GATCATCGATCGAGCTAGCTAGCTA": "Romanian DNA Institute"
+  };
+  
+  // Initialize variables
+  let isProtected = false;
+  let owner: string | null = null;
+  let validationCode = "fărăRambursare900000"; // Romanian validation code
+  
+  // Check if this exact sequence is protected
+  if (protectedSequences[sequence]) {
+    isProtected = true;
+    owner = protectedSequences[sequence];
+  } else {
+    // Check if it's a partial match of a protected sequence
+    for (const [protectedSeq, seqOwner] of Object.entries(protectedSequences)) {
+      if (sequence.includes(protectedSeq)) {
+        isProtected = true;
+        owner = seqOwner;
+        break;
+      }
+    }
+  }
+  
+  // Also use the standard verification function as a backup
+  if (!owner) {
+    const ownerFromWatermark = verifyDnaCopyright(sequence);
+    if (ownerFromWatermark) {
+      isProtected = true;
+      owner = ownerFromWatermark;
+    }
+  }
+  
+  return { isProtected, owner, validationCode };
+}
