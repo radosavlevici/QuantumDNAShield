@@ -20,16 +20,16 @@ const Navigation = ({ currentPath, mobile = false, onNavClick }: NavigationProps
     <>
       {navItems.map((item) => (
         <Link key={item.path} href={item.path}>
-          <a
+          <span
             className={`${
               currentPath === item.path
                 ? "text-primary font-medium"
                 : "text-dark-light hover:text-primary"
-            } transition`}
+            } transition cursor-pointer`}
             onClick={onNavClick}
           >
             {item.label}
-          </a>
+          </span>
         </Link>
       ))}
     </>

@@ -16,7 +16,7 @@ const Header = () => {
         <div className="flex justify-between items-center py-4">
           <div className="flex items-center space-x-4">
             <Link href="/">
-              <a className="font-bold text-2xl text-primary">Quantum DNA Platform</a>
+              <span className="font-bold text-2xl text-primary cursor-pointer">Quantum DNA Platform</span>
             </Link>
           </div>
           

@@ -11,6 +11,7 @@ import QuantumAlgorithms from "@/pages/QuantumAlgorithms";
 import DnaSecurity from "@/pages/DnaSecurity";
 import QuantumMl from "@/pages/QuantumMl";
 import Resources from "@/pages/Resources";
+import { LanguageProvider } from "@/lib/languageContext";
 
 function Router() {
   return (
@@ -30,10 +31,12 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <Layout>
-          <Toaster />
-          <Router />
-        </Layout>
+        <LanguageProvider>
+          <Layout>
+            <Toaster />
+            <Router />
+          </Layout>
+        </LanguageProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );
