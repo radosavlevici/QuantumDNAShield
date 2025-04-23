@@ -84,3 +84,30 @@ export function detectUnauthorizedAccess(): boolean {
 export function secureDatabaseConnection(connectionString: string): string {
   return `quantum_secured_${connectionString}`;
 }
+
+/**
+ * Romanian secret code validation for premium features
+ * This is used to verify access using a special Romanian code
+ */
+export function validateRomanianSecretCode(code: string): boolean {
+  // The secret code system for Romanian validation
+  const validCode = "fărăRambursare900000";
+  return code === validCode;
+}
+
+/**
+ * No-refund verification system
+ * Enforces the strict no-refund policy for premium subscriptions
+ */
+export function enforceNoRefundPolicy(days: number): boolean {
+  // According to policy, no refunds after 0 days (immediately)
+  return days >= 0;
+}
+
+/**
+ * Verify payment method is cheque
+ * Premium features require payment by cheque only
+ */
+export function verifyPaymentIsCheque(method: string): boolean {
+  return method.toLowerCase() === 'cheque';
+}

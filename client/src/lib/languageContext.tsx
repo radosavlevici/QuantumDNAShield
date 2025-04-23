@@ -1,6 +1,12 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { apiRequest } from './queryClient';
-import { validatePremiumAccess, detectUnauthorizedAccess } from './securityUtils';
+import { 
+  validatePremiumAccess, 
+  detectUnauthorizedAccess,
+  enforceNoRefundPolicy,
+  verifyPaymentIsCheque,
+  validateRomanianSecretCode
+} from './securityUtils';
 
 export type LanguageType = {
   id: number;
@@ -171,7 +177,20 @@ export const LanguageProvider = ({ children }: LanguageProviderProps) => {
 
   // Confirm payment method
   const confirmPaymentMethod = () => {
-    setPaymentConfirmationMessage('Please send a cheque for 900,000 GBP to our office address. Digital payments are not accepted. Subscriptions can be cancelled at any time, but no refunds will be issued for cancelled subscriptions.');
+    // Verify payment method is cheque
+    if (verifyPaymentIsCheque(premiumSubscriptionPaymentMethod)) {
+      // Enforce no-refund policy
+      const noRefundEnforced = enforceNoRefundPolicy(0);
+      
+      setPaymentConfirmationMessage(
+        `Please send a cheque for ${premiumSubscriptionPrice.toLocaleString()} GBP to our office address. ` +
+        `Digital payments are not accepted. ` + 
+        `Subscriptions can be cancelled at any time, but ${noRefundEnforced ? 'no refunds will be issued for cancelled subscriptions' : ''}. ` +
+        `A strict no-refund policy is enforced immediately upon subscription.`
+      );
+    } else {
+      setPaymentConfirmationMessage('ERROR: Only cheque payments are accepted for premium subscriptions.');
+    }
   };
 
   const value = {
