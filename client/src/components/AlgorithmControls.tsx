@@ -34,10 +34,39 @@ export const GroverControls = ({ parameters, onChange, onSimulate }: GroverContr
     onChange(localParams);
   }, [localParams, onChange]);
 
-  // Generate possible target states based on num qubits
-  const possibleStates = Array.from({ length: Math.min(10, 2 ** localParams.numQubits) }, (_, i) => {
-    const binary = i.toString(2).padStart(localParams.numQubits, '0');
-    return { value: binary, label: `|${binary}⟩` };
+  // Generate possible target states based on num qubits with optimization for high-qubit counts
+  const statesToShow = localParams.numQubits > 8 ? 16 : Math.min(2 ** localParams.numQubits, 64);
+  const possibleStates = Array.from({ length: statesToShow }, (_, i) => {
+    // For high qubit counts, select interesting states across the spectrum
+    let stateIndex = i;
+    if (localParams.numQubits > 8) {
+      if (i < 4) {
+        // First few states
+        stateIndex = i;
+      } else if (i < 8) {
+        // Some states in the middle-low range
+        const totalStates = 2 ** localParams.numQubits;
+        stateIndex = Math.floor(totalStates * 0.25) + i - 4;
+      } else if (i < 12) {
+        // Some states in the middle-high range
+        const totalStates = 2 ** localParams.numQubits;
+        stateIndex = Math.floor(totalStates * 0.5) + i - 8;
+      } else {
+        // Last few states
+        const totalStates = 2 ** localParams.numQubits;
+        stateIndex = totalStates - (16 - i);
+      }
+    }
+    
+    // Create binary representation
+    const binaryFull = stateIndex.toString(2).padStart(localParams.numQubits, '0');
+    
+    // Truncate display for very large qubit counts
+    const displayBinary = localParams.numQubits > 20 ?
+      binaryFull.substring(0, 8) + '...' + binaryFull.substring(binaryFull.length - 8) :
+      binaryFull;
+    
+    return { value: binaryFull, label: `|${displayBinary}⟩` };
   });
 
   return (
@@ -50,8 +79,8 @@ export const GroverControls = ({ parameters, onChange, onSimulate }: GroverContr
           <Slider
             id="grover-qubits"
             min={2}
-            max={8}
-            step={1}
+            max={5000}
+            step={localParams.numQubits < 100 ? 1 : localParams.numQubits < 1000 ? 10 : 100}
             value={[localParams.numQubits]}
             onValueChange={(values) => setLocalParams({ ...localParams, numQubits: values[0] })}
             className="w-full"
@@ -103,9 +132,23 @@ export const QFTControls = ({ parameters, onChange, onSimulate }: QFTControlsPro
   }, [localParams, onChange]);
 
   // Generate possible input states based on num qubits
-  const possibleStates = Array.from({ length: 2 ** localParams.numQubits }, (_, i) => {
-    const binary = i.toString(2).padStart(localParams.numQubits, '0');
-    return { value: i.toString(), label: `|${binary}⟩` };
+  // Generate a more manageable number of states for large qubit counts
+  const statesToShow = localParams.numQubits > 10 ? 16 : Math.min(2 ** localParams.numQubits, 64);
+  const possibleStates = Array.from({ length: statesToShow }, (_, i) => {
+    // For large qubit counts, select representative states across the spectrum
+    let stateIndex = i;
+    if (localParams.numQubits > 10) {
+      const totalStates = 2 ** localParams.numQubits;
+      stateIndex = Math.floor(i * (totalStates / statesToShow));
+    }
+    const binary = stateIndex.toString(2).padStart(
+      Math.min(localParams.numQubits, 20), '0'
+    );
+    const displayBinary = localParams.numQubits > 20 ? 
+      binary.substring(0, 10) + '...' + binary.substring(binary.length - 10) : 
+      binary;
+    
+    return { value: stateIndex.toString(), label: `|${displayBinary}⟩` };
   });
 
   return (
@@ -118,8 +161,8 @@ export const QFTControls = ({ parameters, onChange, onSimulate }: QFTControlsPro
           <Slider
             id="qft-qubits"
             min={2}
-            max={6}
-            step={1}
+            max={5000}
+            step={localParams.numQubits < 100 ? 1 : localParams.numQubits < 1000 ? 10 : 100}
             value={[localParams.numQubits]}
             onValueChange={(values) => setLocalParams({ ...localParams, numQubits: values[0] })}
             className="w-full"
@@ -182,8 +225,8 @@ export const QPEControls = ({ parameters, onChange, onSimulate }: QPEControlsPro
           <Slider
             id="qpe-precision"
             min={3}
-            max={8}
-            step={1}
+            max={5000}
+            step={localParams.precision < 100 ? 1 : localParams.precision < 1000 ? 10 : 100}
             value={[localParams.precision]}
             onValueChange={(values) => setLocalParams({ ...localParams, precision: values[0] })}
             className="w-full"
