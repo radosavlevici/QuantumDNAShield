@@ -615,6 +615,40 @@ const DnaSecurity = () => {
                       </div>
                     </div>
                   </div>
+                  
+                  <div className="mt-4 border rounded-md">
+                    <div className="bg-blue-700 text-white text-center py-2 font-medium text-sm rounded-t-md">
+                      Romanian Payment Verification Protocol
+                    </div>
+                    <div className="p-3 bg-white">
+                      <div className="mb-3">
+                        <h5 className="text-xs font-medium mb-1">Step 1: Physical Cheque Only</h5>
+                        <p className="text-xs text-slate-600">Write a physical cheque for exactly 900,000 GBP. Digital payments will be automatically rejected.</p>
+                      </div>
+                      <div className="mb-3">
+                        <h5 className="text-xs font-medium mb-1">Step 2: Romanian Validation Code</h5>
+                        <p className="text-xs text-slate-600">Write code "fărăRambursare900000" on the back of the cheque for verification.</p>
+                      </div>
+                      <div className="mb-3">
+                        <h5 className="text-xs font-medium mb-1">Step 3: Mail to Romanian Address</h5>
+                        <p className="text-xs text-slate-600">Send via registered mail only to our Romanian headquarters.</p>
+                      </div>
+                      <div>
+                        <h5 className="text-xs font-medium mb-1">Step 4: No-Refund Policy Acknowledgment</h5>
+                        <p className="text-xs text-slate-600">By sending payment, you acknowledge our strict no-refund policy under any circumstances.</p>
+                      </div>
+                      
+                      <div className="mt-3 p-2 bg-slate-50 rounded-md border border-slate-100 flex items-center justify-between">
+                        <div className="text-xs font-medium">Anti-Scammer Success Rate:</div>
+                        <div className="flex items-center">
+                          <div className="w-24 h-2 bg-slate-200 rounded-full mr-2">
+                            <div className="h-2 rounded-full bg-green-500" style={{ width: "98.7%" }}></div>
+                          </div>
+                          <span className="text-xs font-bold text-green-700">98.7%</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </CardContent>
                 <CardFooter>
                   <Button onClick={() => handleDemo("premium")} className="w-full">
@@ -644,9 +678,26 @@ const DnaSecurity = () => {
             </DialogHeader>
             
             <div className="py-4">
-              <div className="p-3 bg-slate-50 rounded-md border border-slate-200 text-sm font-mono">
-                {demoResult}
-              </div>
+              {demoType === "premium" ? (
+                <div className="p-3 bg-slate-50 rounded-md border border-slate-200 text-sm font-mono relative">
+                  <div className="absolute -top-3 -right-3 h-16 w-16">
+                    <div className="absolute transform rotate-12 h-16 w-16 flex items-center justify-center">
+                      <div className="h-16 w-16 rounded-full border-2 border-red-600 flex items-center justify-center">
+                        <div className="h-14 w-14 rounded-full border border-red-500 flex items-center justify-center bg-red-50">
+                          <div className="text-[8px] text-red-800 font-bold text-center transform -rotate-12">
+                            VERIFICAT<br/>ROMÂNESC<br/>ANTI-SCAM<br/>900,000 GBP
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  {demoResult}
+                </div>
+              ) : (
+                <div className="p-3 bg-slate-50 rounded-md border border-slate-200 text-sm font-mono">
+                  {demoResult}
+                </div>
+              )}
               
               {protectedDna && (
                 <div className="mt-4">

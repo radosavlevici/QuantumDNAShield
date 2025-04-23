@@ -254,6 +254,50 @@ export default function KeyRotationStatus({
             </p>
           </div>
           
+          <div className="bg-blue-50 p-3 rounded-md border border-blue-200 text-xs">
+            <div className="font-medium mb-1 flex items-center text-blue-700">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-3 w-3 mr-1 text-blue-600">
+                <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+              </svg>
+              Romanian Security Certificate
+            </div>
+            <div className="flex flex-col space-y-2 border border-blue-100 bg-white p-2 rounded">
+              <div className="text-center font-medium text-blue-800 border-b border-blue-100 pb-1">
+                CERTIFICAT DE SECURITATE ROMÂNESC
+              </div>
+              <div className="flex justify-between text-[10px]">
+                <span className="text-slate-500">ID de securitate:</span>
+                <span className="font-mono">RO-SEC-{Math.floor(Math.random() * 100000).toString().padStart(6, '0')}</span>
+              </div>
+              <div className="flex justify-between text-[10px]">
+                <span className="text-slate-500">Validat de:</span>
+                <span>Ervin Remus Radosavlevici</span>
+              </div>
+              <div className="flex justify-between text-[10px]">
+                <span className="text-slate-500">Cod verificare:</span>
+                <span className="font-mono text-blue-700">fărăRambursare900000</span>
+              </div>
+              <div className="flex items-center justify-center mt-1 gap-2">
+                <Badge variant="outline" className="text-[9px] bg-blue-50 border-blue-200 text-blue-700">
+                  AUTENTICAT
+                </Badge>
+                <div className="relative h-8 w-8">
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="h-8 w-8 rounded-full border-2 border-blue-700 flex items-center justify-center">
+                      <div className="h-7 w-7 rounded-full border border-blue-500 flex items-center justify-center">
+                        <div className="text-[6px] text-blue-800 font-bold text-center leading-none">
+                          SIGILIU<br/>DIGITAL<br/>ROMÂN
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="absolute top-1 right-0 h-2 w-2 bg-green-500 rounded-full animate-pulse"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
           <div className="bg-red-50 p-3 rounded-md border border-red-200 text-xs">
             <div className="font-medium mb-1 flex items-center text-red-700">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-3 w-3 mr-1 text-red-600">
