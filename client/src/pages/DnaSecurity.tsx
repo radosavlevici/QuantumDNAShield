@@ -297,7 +297,11 @@ const DnaSecurity = () => {
                   </div>
                 </CardContent>
                 <CardFooter>
-                  <Button variant="outline" onClick={() => confirmPaymentMethod()}>
+                  <Button variant="outline" onClick={() => {
+                    setDemoType("premium");
+                    setDemoResult(`Premium DNA copyright registration costs 900,000 GBP per sequence. Payment by cheque only. No refunds are provided under any circumstances as per our strict no-refund policy. Romanian validation code: fărăRambursare900000`);
+                    setShowDemo(true);
+                  }}>
                     Premium Registration Details
                   </Button>
                 </CardFooter>
@@ -373,6 +377,7 @@ const DnaSecurity = () => {
                 {demoType === "key" && "Quantum Key Generation"}
                 {demoType === "copyright" && "Copyright Protection Result"}
                 {demoType === "verify-copyright" && "Copyright Verification Result"}
+                {demoType === "premium" && "Premium Registration - No Refund Policy"}
               </DialogDescription>
             </DialogHeader>
             
