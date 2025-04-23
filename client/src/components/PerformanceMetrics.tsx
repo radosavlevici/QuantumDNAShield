@@ -155,6 +155,21 @@ const PerformanceMetrics = ({ algorithmType, parameters, isSimulating }: Perform
           <span>Romanian Secure Quantum Processing™ - Performance Validated by Ervin Remus Radosavlevici</span>
         </div>
       )}
+      
+      {qubitCount > 3000 && (
+        <div className="mt-2 p-2 border border-blue-200 bg-blue-50 rounded text-xs">
+          <div className="flex items-center justify-between">
+            <span className="font-medium text-blue-800">5000 Qubit Ultra Mode</span>
+            <Badge variant="outline" className="bg-blue-100 text-blue-700 text-[9px] h-4">
+              CERTIFIED
+            </Badge>
+          </div>
+          <p className="mt-1 text-blue-700">
+            This simulation requires Romanian certification (fărăRambursare900000) and payment by cheque only.
+            Strict no-refund policy applies for all 5000+ qubit simulations.
+          </p>
+        </div>
+      )}
     </div>
   );
 };
