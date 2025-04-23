@@ -93,21 +93,45 @@ export const LanguageProvider = ({ children }: LanguageProviderProps) => {
     const loadLanguages = async () => {
       setIsLoadingLanguages(true);
       try {
+        console.log('Fetching languages from API');
         const response = await fetch('/api/languages');
         const data = await response.json();
-        setLanguages(data);
+        console.log('Received languages from API:', data);
         
-        // Set default language (Romanian)
-        const defaultLang = data.find((lang: LanguageType) => lang.isDefault);
-        if (defaultLang) {
-          setCurrentLanguage(defaultLang.code);
+        if (Array.isArray(data) && data.length > 0) {
+          setLanguages(data);
+          
+          // Set default language (Romanian)
+          const defaultLang = data.find((lang: LanguageType) => lang.isDefault);
+          if (defaultLang) {
+            console.log('Setting default language to:', defaultLang.code);
+            setCurrentLanguage(defaultLang.code);
+          }
+        } else {
+          console.warn('No languages found in API response, using fallback');
+          // Fallback to defaults
+          const fallbackLanguages = [
+            { id: 1, code: 'ro', name: 'Romanian', isDefault: true, isPremium: false },
+            { id: 2, code: 'en', name: 'English', isDefault: false, isPremium: true },
+            { id: 3, code: 'fr', name: 'French', isDefault: false, isPremium: true },
+            { id: 4, code: 'de', name: 'German', isDefault: false, isPremium: true },
+            { id: 5, code: 'es', name: 'Spanish', isDefault: false, isPremium: true }
+          ];
+          setLanguages(fallbackLanguages);
+          setCurrentLanguage('ro');
         }
       } catch (error) {
         console.error('Failed to load languages:', error);
         // Fallback to defaults
-        setLanguages([
-          { id: 1, code: 'ro', name: 'Romanian', isDefault: true, isPremium: false }
-        ]);
+        const fallbackLanguages = [
+          { id: 1, code: 'ro', name: 'Romanian', isDefault: true, isPremium: false },
+          { id: 2, code: 'en', name: 'English', isDefault: false, isPremium: true },
+          { id: 3, code: 'fr', name: 'French', isDefault: false, isPremium: true },
+          { id: 4, code: 'de', name: 'German', isDefault: false, isPremium: true },
+          { id: 5, code: 'es', name: 'Spanish', isDefault: false, isPremium: true }
+        ];
+        setLanguages(fallbackLanguages);
+        setCurrentLanguage('ro');
       } finally {
         setIsLoadingLanguages(false);
       }
