@@ -36,11 +36,13 @@ export function detectTampering(originalData: string, currentData: string): bool
  * Simulates quantum key distribution for secure DNA data sharing
  * Automatically generates private-public key pairs for secure data exchange
  */
-export function generateQuantumKey(privateKey: boolean = true): {
+export function generateQuantumKey(privateKey: boolean = true, enableAutoRotation: boolean = true): {
   key: string;
   isPrivate: boolean;
   validationCode: string;
   expiresIn: string;
+  autoRotation: boolean;
+  rotationPeriod?: string;
 } {
   console.log('Generating quantum-secure key for DNA data protection');
   
@@ -70,7 +72,9 @@ export function generateQuantumKey(privateKey: boolean = true): {
     key: key,
     isPrivate: privateKey,
     validationCode: "fărăRambursare900000", // Romanian validation code
-    expiresIn: privateKey ? "Never" : "30 days"
+    expiresIn: privateKey ? "Never" : "30 days",
+    autoRotation: enableAutoRotation,
+    rotationPeriod: enableAutoRotation ? (privateKey ? "90 days" : "7 days") : undefined
   };
 }
 

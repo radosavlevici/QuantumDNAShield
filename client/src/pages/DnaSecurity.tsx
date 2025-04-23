@@ -46,14 +46,16 @@ const DnaSecurity = () => {
         setDemoResult(`Tamper detection: ${isTampered ? 'Tampering detected ✗' : 'No tampering detected ✓'}`);
         break;
       case "key":
-        const keyResult = generateQuantumKey(true); // Generate private key by default
+        const keyResult = generateQuantumKey(true, true); // Generate private key with auto-rotation by default
         setDemoResult(
           `Generated ${keyResult.isPrivate ? 'private' : 'public'} quantum-secure key:\n\n` + 
           `${keyResult.key}\n\n` + 
           `Type: ${keyResult.isPrivate ? 'Private (ROQKD)' : 'Public (PUBQK)'}\n` + 
           `Romanian validation code: ${keyResult.validationCode}\n` +
           `Expires: ${keyResult.expiresIn}\n` +
-          `Protected: ${keyResult.isPrivate ? 'Yes' : 'No'}`
+          `Protected: ${keyResult.isPrivate ? 'Yes' : 'No'}\n` +
+          `Auto-rotation: ${keyResult.autoRotation ? 'Enabled' : 'Disabled'}\n` +
+          (keyResult.autoRotation ? `Rotation period: ${keyResult.rotationPeriod}` : '')
         );
         break;
       case "copyright":
@@ -158,20 +160,36 @@ const DnaSecurity = () => {
                       The system automatically generates ROQKD (Romanian Quantum Key Distribution) 
                       private keys with Romanian validation code.
                     </p>
+                    
+                    <div className="mt-2 ml-7 border-t border-green-200 pt-2">
+                      <div className="flex items-center space-x-2 text-sm font-medium text-green-800">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-green-500">
+                          <path d="M21 12a9 9 0 0 0-9-9 9 9 0 0 0-9 9 9 9 0 0 0 9 9 9 9 0 0 0 9-9Z"></path>
+                          <polyline points="12 7 12 12 15 15"></polyline>
+                        </svg>
+                        <span>Automatic key rotation</span>
+                      </div>
+                      <p className="text-xs text-green-700 mt-1 ml-6">
+                        Private keys auto-rotate every 90 days, while public keys rotate every 7 days 
+                        for enhanced security. Romanian-based cryptographic rotation ensures quantum-resistant protection.
+                      </p>
+                    </div>
                   </div>
                 </CardContent>
                 <CardFooter className="flex flex-col sm:flex-row gap-2">
                   <Button onClick={() => handleDemo("key")}>Generate Private Key</Button>
                   <Button variant="outline" onClick={() => {
                     setDemoType("key");
-                    const publicKey = generateQuantumKey(false); // Generate public key
+                    const publicKey = generateQuantumKey(false, true); // Generate public key with auto-rotation
                     setDemoResult(
                       `Generated ${publicKey.isPrivate ? 'private' : 'public'} quantum-secure key:\n\n` + 
                       `${publicKey.key}\n\n` + 
                       `Type: ${publicKey.isPrivate ? 'Private (ROQKD)' : 'Public (PUBQK)'}\n` + 
                       `Romanian validation code: ${publicKey.validationCode}\n` +
                       `Expires: ${publicKey.expiresIn}\n` +
-                      `Protected: ${publicKey.isPrivate ? 'Yes' : 'No'}`
+                      `Protected: ${publicKey.isPrivate ? 'Yes' : 'No'}\n` +
+                      `Auto-rotation: ${publicKey.autoRotation ? 'Enabled' : 'Disabled'}\n` +
+                      (publicKey.autoRotation ? `Rotation period: ${publicKey.rotationPeriod}` : '')
                     );
                     setShowDemo(true);
                   }}>Generate Public Key</Button>
