@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { generateQuantumKey } from "@/lib/securityUtils";
+import { useLanguage } from "@/lib/languageContext";
 
 interface KeyRotationHistoryEntry {
   id: string;

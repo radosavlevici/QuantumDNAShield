@@ -35,46 +35,112 @@ export function detectTampering(originalData: string, currentData: string): bool
 /**
  * Simulates quantum key distribution for secure DNA data sharing
  * Automatically generates private-public key pairs for secure data exchange
+ * Enhanced with Romanian security certification and key visibility controls
  */
-export function generateQuantumKey(privateKey: boolean = true, enableAutoRotation: boolean = true): {
+export function generateQuantumKey(
+  privateKey: boolean = true, 
+  enableAutoRotation: boolean = true,
+  userAuthLevel: number = 0, // 0-2 for normal users, 3-4 for advanced, 5+ for administrators
+  userHasRomanianCertificate: boolean = false
+): {
   key: string;
   isPrivate: boolean;
   validationCode: string;
   expiresIn: string;
   autoRotation: boolean;
   rotationPeriod?: string;
+  keyVisibility: "hidden" | "partial" | "full";
+  securityLevel: number;
+  requiresRomanianValidation: boolean;
+  certificateId?: string;
 } {
   console.log('Generating quantum-secure key for DNA data protection');
   
   const keyLength = privateKey ? 32 : 24; // 256-bit or 192-bit key
-  let key = '';
+  let fullKey = '';
   const validChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
   
   // Add Romanian identifier prefix to private keys
   if (privateKey) {
-    key = 'ROQKD-'; // Romanian Quantum Key Distribution
+    fullKey = 'ROQKD-'; // Romanian Quantum Key Distribution
   } else {
-    key = 'PUBQK-'; // Public Quantum Key
+    fullKey = 'PUBQK-'; // Public Quantum Key
   }
   
   for (let i = 0; i < keyLength; i++) {
     // Simulate quantum randomness with enhanced entropy
     const randomIndex = Math.floor(Math.random() * validChars.length);
-    key += validChars.charAt(randomIndex);
+    fullKey += validChars.charAt(randomIndex);
   }
   
   // Add quantum key verification suffix
   if (privateKey) {
-    key += '-PROTECTED';
+    fullKey += '-PROTECTED';
   }
   
+  // Determine key visibility based on user's authentication level
+  // Private keys have stricter visibility requirements
+  let keyVisibility: "hidden" | "partial" | "full" = "hidden";
+  const securityLevel = privateKey ? 5 : 3; // Private keys are level 5 security, public are level 3
+  
+  if (privateKey) {
+    // For private keys
+    if (userAuthLevel >= 5 && userHasRomanianCertificate) {
+      keyVisibility = "full"; // Only Romanian admins can see full private keys
+    } else if (userAuthLevel >= 3) {
+      keyVisibility = "partial"; // Advanced users see partial keys
+    } else {
+      keyVisibility = "hidden"; // Normal users can't see private keys
+    }
+  } else {
+    // For public keys
+    if (userAuthLevel >= 3 || userHasRomanianCertificate) {
+      keyVisibility = "full"; // Advanced users or Romanian certificate holders can see full public keys
+    } else if (userAuthLevel >= 1) {
+      keyVisibility = "partial"; // Basic users see partial public keys
+    } else {
+      keyVisibility = "hidden"; // Guests can't see public keys
+    }
+  }
+  
+  // Apply visibility rules to the actual displayed key
+  let displayKey: string;
+  if (keyVisibility === "full") {
+    displayKey = fullKey;
+  } else if (keyVisibility === "partial") {
+    // Show only first few characters and last few characters
+    const prefix = fullKey.substring(0, 8);
+    const suffix = fullKey.substring(fullKey.length - 4);
+    displayKey = `${prefix}••••••••••••••••••${suffix}`;
+  } else {
+    // Completely hide the key
+    displayKey = "••••••••••••••••••••••••••••••••••••••••••";
+  }
+  
+  // Generate a unique Romanian security certificate ID
+  const certificateId = `RO-SEC-${Math.floor(100000 + Math.random() * 900000)}`;
+  
+  // Select a validation code
+  const validationCodes = [
+    "fărăRambursare900000", 
+    "securitateRomână", 
+    "verificatRomânesc",
+    "sigiliatRomânesc",
+    "româniaCriptografică"
+  ];
+  const validationCode = validationCodes[Math.floor(Math.random() * validationCodes.length)];
+  
   return {
-    key: key,
+    key: displayKey,
     isPrivate: privateKey,
-    validationCode: "fărăRambursare900000", // Romanian validation code
-    expiresIn: privateKey ? "Never" : "30 days",
+    validationCode: validationCode,
+    expiresIn: privateKey ? "90 days" : "7 days",
     autoRotation: enableAutoRotation,
-    rotationPeriod: enableAutoRotation ? (privateKey ? "90 days" : "7 days") : undefined
+    rotationPeriod: enableAutoRotation ? (privateKey ? "90 days" : "7 days") : undefined,
+    keyVisibility,
+    securityLevel,
+    requiresRomanianValidation: privateKey, // Private keys always require Romanian validation
+    certificateId
   };
 }
 

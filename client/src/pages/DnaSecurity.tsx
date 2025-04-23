@@ -49,36 +49,71 @@ const DnaSecurity = () => {
         setDemoResult(`Tamper detection: ${isTampered ? 'Tampering detected ✗' : 'No tampering detected ✓'}`);
         break;
       case "key":
-        const keyResult = generateQuantumKey(true, true); // Generate private key with auto-rotation by default
+        const userAuthLevel = currentUser?.isSubscribed ? 3 : 1; // Higher auth level for subscribers
+        const hasRomanianCert = currentUser?.preferredLanguage === "ro"; // Romanian users have certificate
+        
+        const keyResult = generateQuantumKey(
+          true, // Generate private key
+          true, // with auto-rotation by default
+          userAuthLevel, // Pass user's auth level
+          hasRomanianCert // Pass if user has Romanian certificate
+        );
+        
         setDemoResult(
           `Generated ${keyResult.isPrivate ? 'private' : 'public'} quantum-secure key:\n\n` + 
           `${keyResult.key}\n\n` + 
           `Type: ${keyResult.isPrivate ? 'Private (ROQKD)' : 'Public (PUBQK)'}\n` + 
+          `Security Level: LEVEL ${keyResult.securityLevel}\n` +
           `Romanian validation code: ${keyResult.validationCode}\n` +
+          `Certificate ID: ${keyResult.certificateId}\n` +
+          `Visibility: ${keyResult.keyVisibility.toUpperCase()}\n` +
           `Expires: ${keyResult.expiresIn}\n` +
-          `Protected: ${keyResult.isPrivate ? 'Yes' : 'No'}\n` +
+          `Romanian validation required: ${keyResult.requiresRomanianValidation ? 'Yes' : 'No'}\n` +
           `Auto-rotation: ${keyResult.autoRotation ? 'Enabled' : 'Disabled'}\n` +
-          (keyResult.autoRotation ? `Rotation period: ${keyResult.rotationPeriod}` : '')
+          (keyResult.autoRotation ? `Rotation period: ${keyResult.rotationPeriod}` : '') +
+          (keyResult.keyVisibility !== "full" ? `\n\n⚠️ KEY VISIBILITY RESTRICTED: Subscribe for full access (900,000 GBP by cheque only)` : '')
         );
         break;
       case "key-rotation":
-        // Handle the new key rotation demo
-        const privateKey = generateQuantumKey(true, true);
-        const publicKey = generateQuantumKey(false, true);
+        // Handle the new key rotation demo with enhanced security visibility
+        const userAuthLevelRot = currentUser?.isSubscribed ? 3 : 1; // Higher auth level for subscribers
+        const hasRomanianCertRot = currentUser?.preferredLanguage === "ro"; // Romanian users have certificate
+        
+        const privateKeyRot = generateQuantumKey(true, true, userAuthLevelRot, hasRomanianCertRot);
+        const publicKeyRot = generateQuantumKey(false, true, userAuthLevelRot, hasRomanianCertRot);
+        
         const rotationDate = new Date();
-        rotationDate.setDate(rotationDate.getDate() + (privateKey.isPrivate ? 90 : 7));
+        rotationDate.setDate(rotationDate.getDate() + (privateKeyRot.isPrivate ? 90 : 7));
+        
+        // Create a visibility-restricted message
+        const privateKeyDisplay = privateKeyRot.keyVisibility === "hidden" ? 
+          "••••••••••••••••••••••" : 
+          (privateKeyRot.keyVisibility === "partial" ? 
+            `${privateKeyRot.key.substring(0, 8)}••••••••` : 
+            privateKeyRot.key.substring(0, 16) + "...");
+            
+        const publicKeyDisplay = publicKeyRot.keyVisibility === "hidden" ? 
+          "••••••••••••••••••••••" : 
+          (publicKeyRot.keyVisibility === "partial" ? 
+            `${publicKeyRot.key.substring(0, 8)}••••••••` : 
+            publicKeyRot.key.substring(0, 16) + "...");
         
         setDemoResult(
           `🔐 Romanian Key Rotation System 🔐\n\n` +
           `Keys are managed under strict Romanian ROQKD standards\n\n` +
-          `Private Key: ${privateKey.key.substring(0, 16)}...\n` +
-          `Public Key: ${publicKey.key.substring(0, 16)}...\n\n` +
-          `Security Level: LEVEL 5 (Romanian Ultra-Secure)\n` +
-          `Romanian Validation Code: ${privateKey.validationCode}\n` +
+          `Private Key: ${privateKeyDisplay}\n` +
+          `Public Key: ${publicKeyDisplay}\n\n` +
+          `Security Level: LEVEL ${privateKeyRot.securityLevel} (Romanian Ultra-Secure)\n` +
+          `Romanian Validation Code: ${privateKeyRot.validationCode}\n` +
+          `Certificate ID: ${privateKeyRot.certificateId}\n` +
           `Next rotation: ${rotationDate.toDateString()}\n\n` +
+          `KEY VISIBILITY STATUS:\n` +
+          `Private key: ${privateKeyRot.keyVisibility.toUpperCase()}\n` +
+          `Public key: ${publicKeyRot.keyVisibility.toUpperCase()}\n\n` +
           `Payment: 900,000 GBP by CHEQUE ONLY\n` +
           `Refund Policy: STRICT NO-REFUND (fărăRambursare900000)\n\n` +
-          `⚠️ Emergency override requires physical verification.`
+          `⚠️ Emergency override requires physical verification.\n` +
+          (privateKeyRot.keyVisibility !== "full" ? `\n⚠️ RESTRICTED VISIBILITY: To see complete private keys, subscribe (900,000 GBP by cheque only) and use Romanian language.` : '')
         );
         break;
       case "copyright":
@@ -237,16 +272,29 @@ const DnaSecurity = () => {
                   <Button onClick={() => handleDemo("key")}>Generate Private Key</Button>
                   <Button variant="outline" onClick={() => {
                     setDemoType("key");
-                    const publicKey = generateQuantumKey(false, true); // Generate public key with auto-rotation
+                    
+                    const userAuthLevel = currentUser?.isSubscribed ? 3 : 1; // Higher auth level for subscribers
+                    const hasRomanianCert = currentUser?.preferredLanguage === "ro"; // Romanian users have certificate
+                    
+                    const publicKey = generateQuantumKey(
+                      false, // Generate public key
+                      true,  // with auto-rotation
+                      userAuthLevel, // Pass user's auth level
+                      hasRomanianCert // Pass if user has Romanian certificate
+                    );
+                    
                     setDemoResult(
                       `Generated ${publicKey.isPrivate ? 'private' : 'public'} quantum-secure key:\n\n` + 
                       `${publicKey.key}\n\n` + 
                       `Type: ${publicKey.isPrivate ? 'Private (ROQKD)' : 'Public (PUBQK)'}\n` + 
+                      `Security Level: LEVEL ${publicKey.securityLevel}\n` +
                       `Romanian validation code: ${publicKey.validationCode}\n` +
+                      `Certificate ID: ${publicKey.certificateId}\n` +
+                      `Visibility: ${publicKey.keyVisibility.toUpperCase()}\n` +
                       `Expires: ${publicKey.expiresIn}\n` +
-                      `Protected: ${publicKey.isPrivate ? 'Yes' : 'No'}\n` +
                       `Auto-rotation: ${publicKey.autoRotation ? 'Enabled' : 'Disabled'}\n` +
-                      (publicKey.autoRotation ? `Rotation period: ${publicKey.rotationPeriod}` : '')
+                      (publicKey.autoRotation ? `Rotation period: ${publicKey.rotationPeriod}` : '') +
+                      (publicKey.keyVisibility !== "full" ? `\n\n⚠️ KEY VISIBILITY RESTRICTED: Subscribe for full access (900,000 GBP by cheque only)` : '')
                     );
                     setShowDemo(true);
                   }}>Generate Public Key</Button>
