@@ -594,7 +594,28 @@ const DnaSecurity = () => {
           </TabsContent>
           
           <TabsContent value="premium" className="space-y-6">
-            <h2 className="text-2xl font-semibold text-dark mb-4">Premium DNA Security Features</h2>
+            <h2 className="text-2xl font-semibold text-dark mb-4">Premium Romanian DNA Security Features</h2>
+            
+            {/* Romanian Security Certificate Banner */}
+            <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-4 mb-6">
+              <div className="flex items-center">
+                <div className="h-12 w-12 bg-blue-700 rounded-full flex items-center justify-center text-white font-bold mr-4">
+                  RO
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-blue-800">Romanian Security Certificate</h3>
+                  <p className="text-sm text-blue-700">
+                    Certificat de Securitate cu Validare Românească
+                  </p>
+                  <div className="mt-2 flex items-center">
+                    <Badge className="bg-blue-600 mr-2">LEVEL 5</Badge>
+                    <span className="text-xs text-blue-800 font-medium">Ultra-Secure Romanian Protection</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Fraud Warning */}
             <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
               <div className="flex">
                 <div className="flex-shrink-0">
@@ -616,16 +637,72 @@ const DnaSecurity = () => {
                 </div>
               </div>
             </div>
+            
             <p className="text-dark-light mb-6">
-              Advanced security features available only to premium subscribers.
+              Advanced Romanian security features available only to premium subscribers with Romanian certification.
             </p>
             
+            {/* Premium Features Highlight */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+              <div className="bg-white p-4 rounded-lg border border-blue-200 shadow-sm">
+                <div className="flex items-center mb-2">
+                  <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center mr-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-600">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" />
+                    </svg>
+                  </div>
+                  <h3 className="font-medium text-blue-900">5000+ Qubit Security</h3>
+                </div>
+                <p className="text-sm text-gray-600 ml-10">Enhanced quantum protection with support for advanced 5000+ qubit security algorithms</p>
+              </div>
+              
+              <div className="bg-white p-4 rounded-lg border border-blue-200 shadow-sm">
+                <div className="flex items-center mb-2">
+                  <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center mr-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-600">
+                      <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+                      <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                    </svg>
+                  </div>
+                  <h3 className="font-medium text-blue-900">Ultra-Secure Key Rotation</h3>
+                </div>
+                <p className="text-sm text-gray-600 ml-10">Romanian certified key rotation with Level 5 security and FULL visibility</p>
+              </div>
+              
+              <div className="bg-white p-4 rounded-lg border border-blue-200 shadow-sm">
+                <div className="flex items-center mb-2">
+                  <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center mr-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-600">
+                      <path d="M8 16H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2" />
+                      <rect width="8" height="8" x="16" y="16" rx="2" transform="rotate(-180 16 16)" />
+                      <path d="M10 8v1" />
+                    </svg>
+                  </div>
+                  <h3 className="font-medium text-blue-900">DNA Copyright Protection</h3>
+                </div>
+                <p className="text-sm text-gray-600 ml-10">Romanian-validated digital watermarking for DNA sequence copyright protection</p>
+              </div>
+              
+              <div className="bg-white p-4 rounded-lg border border-blue-200 shadow-sm">
+                <div className="flex items-center mb-2">
+                  <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center mr-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-600">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" />
+                      <path d="m9 12 2 2 4-4" />
+                    </svg>
+                  </div>
+                  <h3 className="font-medium text-blue-900">Scammer Detection</h3>
+                </div>
+                <p className="text-sm text-gray-600 ml-10">Advanced Romanian anti-fraud detection with 98.7% accuracy</p>
+              </div>
+            </div>
+            
             <div className="grid grid-cols-1 gap-6">
-              <Card className="border-amber-200 bg-amber-50">
+              <Card className="border-blue-200 bg-gradient-to-r from-white to-blue-50">
                 <CardHeader>
                   <div className="flex items-center justify-between">
-                    <CardTitle>Premium Access Required</CardTitle>
-                    <Lock className="h-6 w-6 text-amber-600" />
+                    <CardTitle>Romanian Ultra-Secure Access</CardTitle>
+                    <Lock className="h-6 w-6 text-blue-600" />
                   </div>
                   <CardDescription>
                     Subscribe to access premium features
