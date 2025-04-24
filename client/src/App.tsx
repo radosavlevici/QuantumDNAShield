@@ -12,6 +12,7 @@ import QuantumAlgorithms from "@/pages/QuantumAlgorithms";
 import DnaSecurity from "@/pages/DnaSecurity";
 import QuantumMl from "@/pages/QuantumMl";
 import Resources from "@/pages/Resources";
+import TestDashboard from "@/pages/TestDashboard";
 import { LanguageProvider } from "@/lib/languageContext";
 
 function Router() {
@@ -23,6 +24,7 @@ function Router() {
       <Route path="/dna-security" component={DnaSecurity} />
       <Route path="/quantum-ml" component={QuantumMl} />
       <Route path="/resources" component={Resources} />
+      <Route path="/test-dashboard" component={TestDashboard} />
       <Route component={NotFound} />
     </Switch>
   );
