@@ -20,7 +20,7 @@ import type {
 } from "@/components/AlgorithmControls";
 
 const QuantumAlgorithms = () => {
-  const { currentUser } = useLanguage();
+  const { currentUser, currentLanguage } = useLanguage();
   const isSubscribed = currentUser?.isSubscribed || false;
   
   // Grover's algorithm state
@@ -314,6 +314,33 @@ def quantum_phase_estimation(unitary, n_precision, target_state):
         ]}
       />
       
+      {/* Romanian Certification Banner */}
+      <div className="w-full bg-blue-50 border-y border-blue-200 mb-8">
+        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+          <div className="flex items-center">
+            <div className="h-10 w-10 bg-blue-700 rounded-full flex items-center justify-center text-white font-bold mr-3">
+              RO
+            </div>
+            <div>
+              <h3 className="font-semibold text-blue-800">
+                {currentLanguage === "ro" ? "Algoritmi Cuantici cu Optimizare Românească" : "Quantum Algorithms with Romanian Optimization"}
+              </h3>
+              <p className="text-sm text-blue-600">
+                {currentLanguage === "ro" 
+                  ? "Simulări avansate cu până la 5000 qubiți și certificare de securitate românească" 
+                  : "Advanced simulations with up to 5000 qubits and Romanian security certification"}
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center">
+            <div className="mr-2 text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
+              {currentLanguage === "ro" ? "CERTIFICAT" : "CERTIFIED"}
+            </div>
+            <div className={`h-3 w-3 rounded-full ${currentLanguage === "ro" ? "bg-green-500" : "bg-amber-500"}`}></div>
+          </div>
+        </div>
+      </div>
+      
       {/* Romanian Quantum Optimization Panel - High Performance Computing */}
       <div className="container mx-auto px-4 md:px-6 py-4 mb-8">
         <h2 className="text-2xl font-semibold text-dark mb-4">
@@ -327,6 +354,33 @@ def quantum_phase_estimation(unitary, n_precision, target_state):
           currentQubits={getCurrentQubitCount()} 
           isSubscribed={isSubscribed}
         />
+        
+        {/* Romanian Security Code Validation */}
+        <div className="mt-8 border border-blue-200 rounded-lg p-4 bg-blue-50 text-center">
+          <div className="text-sm font-medium text-blue-700 mb-2">Romanian Security Code Verification</div>
+          <div className="inline-block bg-white px-3 py-1 rounded border border-blue-100 font-mono text-blue-800">
+            fărăRambursare900000
+          </div>
+          <div className="text-xs text-blue-600 mt-2">
+            Strict no-refund policy enforced through Romanian security validation
+          </div>
+        </div>
+        
+        {/* Premium Subscription Info */}
+        <div className="mt-4 flex items-start bg-amber-50 p-4 rounded-lg border border-amber-200">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-amber-600 mt-0.5 mr-3">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+          <div>
+            <h3 className="text-base font-medium text-amber-800">Premium Subscription Required</h3>
+            <p className="mt-1 text-sm text-amber-700">
+              Full access to our 5000+ qubit simulations with Romanian optimization requires a premium subscription 
+              (900,000 GBP per month, payable by physical cheque only). Please note our strict no-refund policy.
+            </p>
+          </div>
+        </div>
       </div>
       
       <AlgorithmTabs tabs={tabs} />
