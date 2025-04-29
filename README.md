@@ -26,12 +26,12 @@ The Quantum DNA Platform is an advanced quantum computing research platform that
 - Romanian-certified security infrastructure
 - Responsive design with premium feature integrations
 
-## Premium Subscription
+## Open Source Project
 
-The platform operates on a premium subscription model:
-- **Cost**: 900,000 GBP per month
-- **Payment Method**: Physical cheque only
-- **Refund Policy**: Strict no-refund policy (Romanian code: "fărăRambursare900000")
+This platform is completely **FREE and OPEN SOURCE** for personal, educational, and research use.
+- **Romanian Certification**: All installations maintain the "fărăRambursare900000" validation code
+- **Security Features**: Includes all 5-level security infrastructure and key rotation system
+- **Fully Featured**: All functionalities available without restrictions for non-commercial use
 
 ## Commercial Use and Royalties
 

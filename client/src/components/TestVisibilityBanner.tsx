@@ -52,8 +52,8 @@ const TestVisibilityBanner: React.FC = () => {
           {/* Subscription */}
           <div className="flex items-center justify-between bg-white/10 p-3 rounded">
             <div className="text-sm">
-              <div className="font-medium">Premium Subscription</div>
-              <div className="text-xs text-purple-200">900,000 GBP (check only)</div>
+              <div className="font-medium">Open Source</div>
+              <div className="text-xs text-purple-200">Free + Commercial Royalties</div>
             </div>
             <Badge className={isSubscribed ? "bg-green-500 text-white" : "bg-white/30"}>
               {isSubscribed ? "ACTIVE" : "INACTIVE"}

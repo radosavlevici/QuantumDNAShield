@@ -31,9 +31,9 @@ Licensee shall:
 - Make all royalty payments within 30 days of the end of each calendar quarter
 - Submit to audit by Licensor or its designated representative upon reasonable notice
 
-### 3.3 Minimum Annual Royalty
+### 3.3 Royalty Payment Terms
 
-Regardless of actual Gross Revenue, Licensee shall pay a minimum annual royalty of 900,000 GBP, payable by physical cheque only, with no refunds permitted under any circumstances.
+All royalty payments must be made in accordance with the terms specified in the commercial license agreement. No refunds are permitted under any circumstances, as indicated by the "fărăRambursare900000" validation code.
 
 ## 4. ROMANIAN CERTIFICATION REQUIREMENTS
 
