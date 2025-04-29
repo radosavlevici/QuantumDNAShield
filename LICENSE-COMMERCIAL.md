@@ -74,7 +74,7 @@ All documentation, marketing materials, and user interfaces must include referen
 Licensee shall not:
 - Modify the core Romanian security certification features
 - Remove or alter the "fărăRambursare900000" validation code
-- Circumvent the payment method restrictions
+- Circumvent the royalty payment requirements
 - Offer refunds in violation of the strict no-refund policy
 - Reduce the supported qubit count below 5000
 

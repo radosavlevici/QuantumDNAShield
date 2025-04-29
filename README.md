@@ -81,7 +81,7 @@ The platform consists of:
 ## Romanian Certification
 
 This platform is certified by Romanian quantum security standards. Certification requirements include:
-- Romanian language as default
+- Romanian certification maintained (now with English default language)
 - "fărăRambursare900000" validation code
 - Level 5 security for private keys
 - 5000+ qubit support with memory optimization
