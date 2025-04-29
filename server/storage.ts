@@ -44,19 +44,19 @@ export class MemStorage implements IStorage {
   }
 
   private async initializeDefaultLanguages() {
-    // Add Romanian as default language
-    const romanian: Language = {
+    // Update: English is now the default language for open-source version
+    const english: Language = {
       id: this.languageIdCounter++,
-      code: "ro",
-      name: "Romanian",
+      code: "en",
+      name: "English",
       isDefault: true,
       isPremium: false
     };
-    this.languages.set(romanian.id, romanian);
+    this.languages.set(english.id, english);
     
     // Add premium languages
     const premiumLanguages: Language[] = [
-      { id: this.languageIdCounter++, code: "en", name: "English", isDefault: false, isPremium: true },
+      { id: this.languageIdCounter++, code: "ro", name: "Romanian", isDefault: false, isPremium: true },
       { id: this.languageIdCounter++, code: "fr", name: "French", isDefault: false, isPremium: true },
       { id: this.languageIdCounter++, code: "de", name: "German", isDefault: false, isPremium: true },
       { id: this.languageIdCounter++, code: "es", name: "Spanish", isDefault: false, isPremium: true },
@@ -85,7 +85,7 @@ export class MemStorage implements IStorage {
       ...insertUser, 
       id, 
       isSubscribed: false, 
-      preferredLanguage: insertUser.preferredLanguage || "ro", // Default to Romanian
+      preferredLanguage: insertUser.preferredLanguage || "en", // Default to English for open source version
       subscriptionEndDate: null
     };
     this.users.set(id, user);
